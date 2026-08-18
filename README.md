@@ -59,6 +59,7 @@ python-interview-practice/
 │   ├── day_002.py
 │   ├── day_003.py
 │   ├── day_004.py
+│   ├── day_005.py
 │   └── ...
 │
 ├── debugging/
@@ -84,6 +85,7 @@ Topic-specific folders will be added naturally as deeper standalone exercises ap
 | Day 002 | OOP, dictionary behavior, mutable defaults, exception handling, truthy/falsy values, numeric edge cases | ✅ Completed |
 | Day 003 | Generators, lazy iteration, `yield` vs `return`, `next()`, `StopIteration`, memory-efficient processing | ✅ Completed |
 | Day 004 | Generator reinforcement, execution timing, shallow copy, deep copy, nested mutability | ✅ Completed |
+| Day 005 | Custom sorting, tuple keys, `sorted()` vs `.sort()`, in-place methods, list comprehensions | ✅ Completed |
 
 ---
 
@@ -1030,6 +1032,272 @@ The nested skills lists are independent objects.
 
 ---
 
+
+# Day 005
+
+File:
+
+```text
+daily/day_005.py
+```
+
+Day 005 focused on **custom sorting, in-place list methods, return values, and concise list-comprehension filtering**.
+
+## 1. Custom Sorting with Multiple Rules
+
+The main coding task ranked model results using several rules at once:
+
+```python
+results = [
+    {"model": "beta", "score": 0.91},
+    {"model": "alpha", "score": 0.91},
+    {"model": "gamma", "score": 0.78},
+    {"model": "delta", "score": None},
+    {"model": "epsilon"},
+]
+```
+
+Requirements included:
+
+- higher score first
+- same score → model name alphabetically
+- missing or `None` scores last
+- missing-score records sorted alphabetically
+- original list order must not be mutated
+
+The final solution used a custom key function:
+
+```python
+def rank_models(results):
+    def get_rank(record):
+        score = record.get("score")
+
+        if score is None:
+            return (1, 0, record["model"])
+
+        return (0, -score, record["model"])
+
+    return sorted(results, key=get_rank)
+```
+
+Expected result:
+
+```python
+[
+    {"model": "alpha", "score": 0.91},
+    {"model": "beta", "score": 0.91},
+    {"model": "gamma", "score": 0.78},
+    {"model": "delta", "score": None},
+    {"model": "epsilon"},
+]
+```
+
+---
+
+## 2. Tuple-Based Sorting Keys
+
+Python compares tuples from left to right.
+
+For valid scores:
+
+```python
+(0, -score, model)
+```
+
+For missing or `None` scores:
+
+```python
+(1, 0, model)
+```
+
+The fields represent:
+
+```text
+group priority
+      ↓
+score priority
+      ↓
+alphabetical tie-breaker
+```
+
+Using `-score` converts normal ascending sorting into descending score order.
+
+Example:
+
+```text
+0.91 -> -0.91
+0.78 -> -0.78
+```
+
+Since `-0.91` comes before `-0.78`, the higher original score appears first.
+
+---
+
+## 3. `sorted()` vs `list.sort()`
+
+Given:
+
+```python
+a = [3, 1, 2]
+b = sorted(a)
+```
+
+results are:
+
+```python
+a
+# [3, 1, 2]
+
+b
+# [1, 2, 3]
+```
+
+`sorted()`:
+
+- returns a new sorted list
+- leaves the original order unchanged
+
+By contrast:
+
+```python
+a = [3, 1, 2]
+b = a.sort()
+```
+
+results are:
+
+```python
+a
+# [1, 2, 3]
+
+b
+# None
+```
+
+`list.sort()`:
+
+- sorts the existing list in place
+- returns `None`
+
+A useful interview summary:
+
+```text
+sorted()    -> new list
+list.sort() -> mutate existing list + return None
+```
+
+---
+
+## 4. `append()` and In-Place Mutation
+
+Given:
+
+```python
+nums = [10, 20, 30]
+
+result = nums.append(40)
+```
+
+the result is:
+
+```python
+nums
+# [10, 20, 30, 40]
+
+result
+# None
+```
+
+`append()` modifies the existing list and does not return the updated list.
+
+Therefore:
+
+```python
+result = nums.append(40)
+```
+
+should not be used when the intention is to store a new list in `result`.
+
+---
+
+## 5. List Comprehension with Safe Dictionary Access
+
+The final coding task filtered users by age:
+
+```python
+users = [
+    {"name": "A", "age": 24},
+    {"name": "B", "age": 19},
+    {"name": "C"},
+    {"name": "D", "age": 30},
+    {"name": "E", "age": None},
+]
+```
+
+Required output:
+
+```python
+["A", "D"]
+```
+
+Solution:
+
+```python
+def adult_names(users):
+    return [
+        user["name"]
+        for user in users
+        if user.get("age") is not None and user["age"] >= 21
+    ]
+```
+
+This combines:
+
+- safe missing-key handling
+- `None` filtering
+- numeric condition checking
+- transformation to the final name list
+
+---
+
+## 6. Avoiding Unnecessary `deepcopy()`
+
+The original custom-sorting attempt used:
+
+```python
+copy.deepcopy(results)
+```
+
+before sorting.
+
+That was safe, but unnecessary for the stated requirement.
+
+This is enough:
+
+```python
+sorted(results, key=get_rank)
+```
+
+because `sorted()` already creates a new outer list and does not reorder the original list.
+
+A deep copy would only be needed if the nested records themselves also needed to be independently mutated.
+
+---
+
+## Day 005 Interview Takeaways
+
+- `sorted()` returns a new sorted list
+- `list.sort()` mutates the existing list and returns `None`
+- custom `key=` functions control sorting behavior
+- tuples are useful for multiple sorting priorities
+- negative numeric keys can reverse numeric ordering
+- `append()` mutates in place and returns `None`
+- list comprehensions can filter and transform in one readable expression
+- `dict.get()` is useful when keys may be missing
+- avoid expensive copying when the requirement does not need it
+
+---
+
 # Interview Lessons So Far
 
 ### Requirement reading matters
@@ -1186,12 +1454,13 @@ python daily/day_001.py
 python daily/day_002.py
 python daily/day_003.py
 python daily/day_004.py
+python daily/day_005.py
 ```
 
 On Windows, `py` can also be used depending on the Python installation:
 
 ```bash
-py daily/day_004.py
+py daily/day_005.py
 ```
 
 ---
@@ -1222,7 +1491,7 @@ Example commit:
 
 ```bash
 git add .
-git commit -m "Day 4: generators, shallow copy and deep copy"
+git commit -m "Day 5: custom sorting and list operations"
 git push
 ```
 
