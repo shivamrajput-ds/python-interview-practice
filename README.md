@@ -1,12 +1,12 @@
-**# Python Interview Practice**
+****# Python Interview Practice****
 
-A coding-first repository documenting daily Python interview preparation for ****Data Science, Machine Learning, AI/ML, Applied AI, Generative AI, RAG, and junior Python-oriented engineering roles****.
+A coding-first repository documenting daily Python interview preparation for ********Data Science, Machine Learning, AI/ML, Applied AI, Generative AI, RAG, and junior Python-oriented engineering roles******.
 
 The objective is not to complete another Python course. The objective is to become comfortable writing, debugging, reviewing, and explaining Python under real interview constraints.
 
-**---**
+****---****
 
-**## What This Repository Builds**
+****## What This Repository Builds****
 
 This practice focuses on:
 
@@ -30,13 +30,13 @@ This practice focuses on:
 
 - explaining Python decisions clearly to an interviewer
 
-This repository is intentionally ****not a DSA repository****. Advanced graph, tree, dynamic-programming, and competitive-programming practice is kept separate.
+This repository is intentionally ********not a DSA repository******. Advanced graph, tree, dynamic-programming, and competitive-programming practice is kept separate.
 
-**---**
+****---****
 
-**## Practice Style**
+****## Practice Style****
 
-Sessions are intentionally ****coding-heavy and interview-driven****.
+Sessions are intentionally ********coding-heavy and interview-driven******.
 
 Typical exercises include:
 
@@ -66,9 +66,9 @@ Typical exercises include:
 
 Each daily file contains the cleaned version of the actual interview practice: final solutions, important mistakes, edge cases, visual explanations, and self-checks.
 
-**---**
+****---****
 
-**## Repository Structure**
+****## Repository Structure****
 
 ```text
 
@@ -116,9 +116,9 @@ python-interview-practice/
 
 Topic-specific folders will be added naturally as deeper standalone exercises appear. Empty folders are not created only for appearance.
 
-**---**
+****---****
 
-**# Progress**
+****# Progress****
 
 | Day | Focus | Status |
 
@@ -133,11 +133,15 @@ Topic-specific folders will be added naturally as deeper standalone exercises ap
 | Day 004 | Generator reinforcement, execution timing, shallow copy, deep copy, nested mutability | ✅ Completed |
 
 | Day 005 | Custom sorting, tuple keys, `sorted()` vs `.sort()`, in-place methods, list comprehensions | ✅ Completed |
+
 | Day 006 | Closures, enclosing scope, `nonlocal`, independent closure state, `TypeError` vs `ValueError` | ✅ Completed |
+| Day 007 | OOP methods, class variables, `@classmethod`, `@staticmethod`, instance shadowing, alternative constructors | ✅ Completed |
+| Day 008 | Validation, case-insensitive filtering, static-method review, decorators, wrapper functions, function rebinding | ✅ Completed |
+| Day 009 | Generator batching, custom exceptions, OOP validation, iterable vs iterator, custom iterators, `StopIteration` | ✅ Completed |
 
-**---**
+****---****
 
-**# Day 001**
+****# Day 001****
 
 File:
 
@@ -147,7 +151,7 @@ daily/day_001.py
 
 ```
 
-**## Main Exercise — Event Aggregation**
+****## Main Exercise — Event Aggregation****
 
 The first coding task summarized API-style event records by event type.
 
@@ -185,7 +189,7 @@ Expected result:
 
 ```
 
-**### Concepts Practiced**
+****### Concepts Practiced****
 
 - nested dictionary aggregation
 
@@ -203,9 +207,9 @@ Expected result:
 
 - clean function design
 
-**---**
+****---****
 
-**## Safe Dictionary Access**
+****## Safe Dictionary Access****
 
 Direct access:
 
@@ -229,9 +233,9 @@ can provide a safe default.
 
 This pattern is useful with API responses, metadata, JSON payloads, and real-world data pipelines.
 
-**---**
+****---****
 
-**## Key Existence vs Falsy Value**
+****## Key Existence vs Falsy Value****
 
 These answer different questions:
 
@@ -243,7 +247,7 @@ if "type" not in event:
 
 ```
 
-checks whether the ****key exists****.
+checks whether the ********key exists******.
 
 ```python
 
@@ -253,7 +257,7 @@ if not event.get("type"):
 
 ```
 
-checks whether the resulting **value is falsy**.
+checks whether the resulting ****value is falsy****.
 
 Common falsy values:
 
@@ -273,13 +277,13 @@ None
 
 {}
 
-set()
+*set*()
 
 ```
 
 ---
 
-## Mutation vs Rebinding
+**## Mutation vs Rebinding**
 
 ```python
 
@@ -301,11 +305,11 @@ b -----┘
 
 ```
 
-### In-place mutation
+**### In-place mutation**
 
 ```python
 
-def add_score(scores, value):
+*def* add_score(*scores*, *value*):
 
     scores += [value]
 
@@ -337,11 +341,11 @@ a is b
 
 ```
 
-### Rebinding
+**### Rebinding**
 
 ```python
 
-def add_score(scores, value):
+*def* add_score(*scores*, *value*):
 
     scores = scores + [value]
 
@@ -375,7 +379,7 @@ a is b
 
 ```
 
-### Interview Vocabulary
+**### Interview Vocabulary**
 
 - object reference
 
@@ -391,7 +395,7 @@ a is b
 
 ---
 
-# Day 002
+**# Day 002**
 
 File:
 
@@ -403,13 +407,13 @@ daily/day_002.py
 
 Day 002 moved from basic dictionary handling into more realistic Python interview behavior: OOP, hidden edge cases, function defaults, exception handling, and numeric data cleaning.
 
-## 1. Mutation vs Rebinding Verification
+**## 1. Mutation vs Rebinding Verification**
 
 A follow-up combined both behaviors:
 
 ```python
 
-def update(values):
+*def* update(*values*):
 
     values.append(40)
 
@@ -441,7 +445,7 @@ The first `append()` mutates the original shared list. The `+` expression then c
 
 ---
 
-## 2. Single-Pass Model Score Aggregation
+**## 2. Single-Pass Model Score Aggregation**
 
 The task returned the best valid score for each model while skipping incomplete records.
 
@@ -471,7 +475,7 @@ Skills tested:
 
 ---
 
-## 3. OOP — `ModelRegistry`
+**## 3. OOP —** `ModelRegistry`
 
 A class was implemented to:
 
@@ -507,19 +511,19 @@ The robust manual scan used:
 
 ```python
 
-result = float("-inf")
+result = *float*("-inf")
 
 ```
 
 ---
 
-## 4. Mutable Default Arguments
+**## 4. Mutable Default Arguments**
 
 Problematic code:
 
 ```python
 
-def register_model(model, models=[]):
+*def* register_model(*model*, *models*=[]):
 
     models.append(model)
 
@@ -533,7 +537,7 @@ Safer pattern:
 
 ```python
 
-def register_model(model, models=None):
+*def* register_model(*model*, *models*=None):
 
     if models is None:
 
@@ -547,7 +551,7 @@ def register_model(model, models=None):
 
 ---
 
-## 5. Dictionary Membership vs `.get()`
+**## 5. Dictionary Membership vs** `.get()`
 
 Given:
 
@@ -583,7 +587,7 @@ x.get("c")
 
 ```
 
-Dictionary membership checks **keys**, not values.
+Dictionary membership checks ****keys****, not values.
 
 This condition is dangerous when checking key existence:
 
@@ -599,7 +603,7 @@ because key `"b"` exists but its value `0` is falsy.
 
 ---
 
-## 6. Exception Handling for Data Cleaning
+**## 6. Exception Handling for Data Cleaning**
 
 Input:
 
@@ -621,7 +625,7 @@ Clean pattern:
 
 ```python
 
-def clean_scores(scores):
+*def* clean_scores(*scores*):
 
     result = []
 
@@ -633,9 +637,9 @@ def clean_scores(scores):
 
         try:
 
-            converted_score = float(score)
+            converted_score = *float*(score)
 
-        except ValueError:
+        except *ValueError*:
 
             continue
 
@@ -657,13 +661,13 @@ Important lessons:
 
 ---
 
-## 7. Valid Zero vs Truthiness
+**## 7. Valid Zero vs Truthiness**
 
 This check is incorrect for numeric validation:
 
 ```python
 
-if float(score):
+if *float*(score):
 
     ...
 
@@ -673,11 +677,11 @@ because:
 
 ```python
 
-float("0")
+*float*("0")
 
 # 0.0
 
-bool(0.0)
+*bool*(0.0)
 
 # False
 
@@ -687,21 +691,21 @@ bool(0.0)
 
 ---
 
-## 8. `NaN` and Infinity
+**## 8.** `NaN` **and Infinity**
 
 Python accepts these strings as floating-point values:
 
 ```python
 
-float("NaN")
+*float*("NaN")
 
 # nan
 
-float("inf")
+*float*("inf")
 
 # inf
 
-float("-inf")
+*float*("-inf")
 
 # -inf
 
@@ -725,13 +729,13 @@ can be used.
 
 ---
 
-## 9. Type-Hint Lessons
+**## 9. Type-Hint Lessons**
 
 Prefer annotations that match the real return type.
 
 ```python
 
-dict[str, float]
+*dict*[*str*, *float*]
 
 ```
 
@@ -739,13 +743,13 @@ If a method may return `None`:
 
 ```python
 
-def best(self, model: str) -> float | None:
+*def* best(*self*, *model*: *str*) -> *float* | None:
 
 ```
 
 ---
 
-# Day 003
+**# Day 003**
 
 File:
 
@@ -755,15 +759,15 @@ daily/day_003.py
 
 ```
 
-Day 003 focused on **generators and lazy iteration**, especially how Python can process large streams of records without building another complete list in memory.
+Day 003 focused on ****generators and lazy iteration****, especially how Python can process large streams of records without building another complete list in memory.
 
-## 1. Memory-Efficient Filtering with `yield`
+**## 1. Memory-Efficient Filtering with** `yield`
 
 The main coding task processed model inference logs and yielded matching records one at a time.
 
 ```python
 
-def slow_requests(records, threshold):
+*def* slow_requests(*records*, *threshold*):
 
     for record in records:
 
@@ -795,7 +799,7 @@ This avoids accumulating every matching record in another list.
 
 ---
 
-## 2. Why a List Was Not the Right Tool
+**## 2. Why a List Was Not the Right Tool**
 
 A normal list-based approach stores all matching records before returning.
 
@@ -843,7 +847,7 @@ This is useful for large logs, streaming records, large datasets, API result str
 
 ---
 
-## 3. `iter()` vs Generator
+**## 3.** `iter()` **vs Generator**
 
 ```python
 
@@ -857,23 +861,23 @@ But:
 
 ```python
 
-list(iter(values))
+*list*(iter(values))
 
 ```
 
 consumes that iterator and creates a list again.
 
-A generator is a **specific kind of iterator** and can be created with a function containing `yield`.
+A generator is a ****specific kind of iterator**** and can be created with a function containing `yield`.
 
 ---
 
-## 4. `next()` and Generator State
+**## 4.** `next()` **and Generator State**
 
 Given:
 
 ```python
 
-def numbers():
+*def* numbers():
 
     yield 10
 
@@ -899,7 +903,7 @@ Each `yield` produces a value and pauses the function while preserving its state
 
 ---
 
-## 5. `return` vs `yield` Inside a Generator
+**## 5.** `return` **vs** `yield` **Inside a Generator**
 
 ```python
 
@@ -943,15 +947,15 @@ raise StopIteration(30)
 
 ```
 
-So `return 30` does **not** produce `30` as another normal yielded item.
+So `return 30` does ****not**** produce `30` as another normal yielded item.
 
 ---
 
-## 6. `StopIteration.value`
+**## 6.** `StopIteration.value`
 
 ```python
 
-def demo():
+*def* demo():
 
     yield 1
 
@@ -975,7 +979,7 @@ try:
 
     print(next(g))
 
-except StopIteration as e:
+except *StopIteration* as e:
 
     print("finished:", e.value)
 
@@ -997,7 +1001,7 @@ The return value is available through `StopIteration.value`.
 
 ---
 
-## 7. What Changes with `yield 3`?
+**## 7. What Changes with** `yield 3`**?**
 
 With:
 
@@ -1021,7 +1025,7 @@ return value → finish generator + StopIteration(value)
 
 ---
 
-# Day 004
+**# Day 004**
 
 File:
 
@@ -1031,9 +1035,9 @@ daily/day_004.py
 
 ```
 
-Day 004 reinforced generators and then moved into **copying, nested mutability, shallow copy, and deep copy**.
+Day 004 reinforced generators and then moved into ****copying, nested mutability, shallow copy, and deep copy****.
 
-## 1. Generator Retry — Valid Numeric Scores
+**## 1. Generator Retry — Valid Numeric Scores**
 
 The coding task converted valid numeric strings and produced them one at a time.
 
@@ -1047,7 +1051,7 @@ Final pattern:
 
 ```python
 
-def valid_scores(values):
+*def* valid_scores(*values*):
 
     for value in values:
 
@@ -1057,9 +1061,9 @@ def valid_scores(values):
 
         try:
 
-            converted_value = float(value)
+            converted_value = *float*(value)
 
-        except ValueError:
+        except *ValueError*:
 
             continue
 
@@ -1099,13 +1103,13 @@ produces it for the caller and pauses the generator.
 
 ---
 
-## 2. Generator Execution Timing
+**## 2. Generator Execution Timing**
 
 Given:
 
 ```python
 
-def test():
+*def* test():
 
     print("A")
 
@@ -1161,11 +1165,11 @@ The first `next()` starts execution, and each `yield` pauses the function.
 
 ---
 
-## 3. `return` Inside a Generator
+**## 3.** `return` **Inside a Generator**
 
 ```python
 
-def test():
+*def* test():
 
     print("A")
 
@@ -1199,7 +1203,7 @@ The value can be read through:
 
 ```python
 
-except StopIteration as e:
+except *StopIteration* as e:
 
     print(e.value)
 
@@ -1207,7 +1211,7 @@ except StopIteration as e:
 
 ---
 
-## 4. Assignment vs Shallow Copy
+**## 4. Assignment vs Shallow Copy**
 
 ```python
 
@@ -1249,7 +1253,7 @@ x is z
 
 ---
 
-## 5. Shallow Copy with Nested Objects
+**## 5. Shallow Copy with Nested Objects**
 
 Consider:
 
@@ -1299,7 +1303,7 @@ x[0] is y[0]
 
 ---
 
-## 6. Deep Copy
+**## 6. Deep Copy**
 
 Using:
 
@@ -1341,7 +1345,7 @@ A mutation inside `x` does not affect `y`.
 
 ---
 
-## 7. Practical Nested Copy — `add_skill()`
+**## 7. Practical Nested Copy —** `add_skill()`
 
 The final coding task required returning an updated nested dictionary without changing the original.
 
@@ -1367,7 +1371,7 @@ Solution:
 
 import copy
 
-def add_skill(data, skill):
+*def* add_skill(*data*, *skill*):
 
     updated_data = copy.deepcopy(data)
 
@@ -1409,7 +1413,7 @@ The nested skills lists are independent objects.
 
 ---
 
-## Day 004 Interview Takeaways
+**## Day 004 Interview Takeaways**
 
 - `print()` and `yield` serve different purposes
 
@@ -1435,7 +1439,9 @@ The nested skills lists are independent objects.
 
 
 
-# Day 005
+
+
+**# Day 005**
 
 File:
 
@@ -1445,9 +1451,9 @@ daily/day_005.py
 
 ```
 
-Day 005 focused on **custom sorting, in-place list methods, return values, and concise list-comprehension filtering**.
+Day 005 focused on ****custom sorting, in-place list methods, return values, and concise list-comprehension filtering****.
 
-## 1. Custom Sorting with Multiple Rules
+**## 1. Custom Sorting with Multiple Rules**
 
 The main coding task ranked model results using several rules at once:
 
@@ -1485,9 +1491,9 @@ The final solution used a custom key function:
 
 ```python
 
-def rank_models(results):
+*def* rank_models(*results*):
 
-    def get_rank(record):
+    *def* get_rank(*record*):
 
         score = record.get("score")
 
@@ -1497,7 +1503,7 @@ def rank_models(results):
 
         return (0, -score, record["model"])
 
-    return sorted(results, key=get_rank)
+    return sorted(results, *key*=get_rank)
 
 ```
 
@@ -1523,7 +1529,7 @@ Expected result:
 
 ---
 
-## 2. Tuple-Based Sorting Keys
+**## 2. Tuple-Based Sorting Keys**
 
 Python compares tuples from left to right.
 
@@ -1575,7 +1581,7 @@ Since `-0.91` comes before `-0.78`, the higher original score appears first.
 
 ---
 
-## 3. `sorted()` vs `list.sort()`
+**## 3.** `sorted()` **vs** `list.sort()`
 
 Given:
 
@@ -1649,7 +1655,7 @@ list.sort() -> mutate existing list + return None
 
 ---
 
-## 4. `append()` and In-Place Mutation
+**## 4.** `append()` **and In-Place Mutation**
 
 Given:
 
@@ -1689,7 +1695,7 @@ should not be used when the intention is to store a new list in `result`.
 
 ---
 
-## 5. List Comprehension with Safe Dictionary Access
+**## 5. List Comprehension with Safe Dictionary Access**
 
 The final coding task filtered users by age:
 
@@ -1723,7 +1729,7 @@ Solution:
 
 ```python
 
-def adult_names(users):
+*def* adult_names(*users*):
 
     return [
 
@@ -1749,7 +1755,7 @@ This combines:
 
 ---
 
-## 6. Avoiding Unnecessary `deepcopy()`
+**## 6. Avoiding Unnecessary** `deepcopy()`
 
 The original custom-sorting attempt used:
 
@@ -1767,7 +1773,7 @@ This is enough:
 
 ```python
 
-sorted(results, key=get_rank)
+sorted(results, *key*=get_rank)
 
 ```
 
@@ -1777,7 +1783,7 @@ A deep copy would only be needed if the nested records themselves also needed to
 
 ---
 
-## Day 005 Interview Takeaways
+**## Day 005 Interview Takeaways**
 
 - `sorted()` returns a new sorted list
 
@@ -1800,74 +1806,95 @@ A deep copy would only be needed if the nested records themselves also needed to
 ---
 
 
+
 ---
 
-# Day 006
+**# Day 006**
 
 File:
 
 ```text
+
 daily/day_006.py
+
 ```
 
-Day 006 focused on **closures, enclosing scope, `nonlocal`, independent closure state, and practical exception-type reasoning**.
+Day 006 focused on ****closures, enclosing scope,** `nonlocal`**, independent closure state, and practical exception-type reasoning****.
 
-## 1. `TypeError` vs `ValueError`
+**## 1.** `TypeError` **vs** `ValueError`
 
 A key theory clarification was distinguishing these two exceptions.
 
-### `ValueError`
+**###** `ValueError`
 
 The input type is acceptable, but the value itself cannot be processed.
 
 ```python
-float("bad")
+
+*float*("bad")
+
 # ValueError
 
-float("")
+*float*("")
+
 # ValueError
 
-int("hello")
+*int*("hello")
+
 # ValueError
+
 ```
 
-### `TypeError`
+**###** `TypeError`
 
 The operation receives an inappropriate type.
 
 ```python
-float(None)
+
+*float*(None)
+
 # TypeError
 
-float([1, 2])
+*float*([1, 2])
+
 # TypeError
 
 len(10)
+
 # TypeError
+
 ```
 
 Interview summary:
 
 ```text
-TypeError  -> inappropriate type
+
+TypeError  -> inappropriate type
+
 ValueError -> acceptable type, invalid value
+
 ```
 
 ---
 
-## 2. Practical Closure — Configurable Score Filter
+**## 2. Practical Closure — Configurable Score Filter**
 
 The main coding task created a function factory:
 
 ```python
-def make_score_filter(threshold):
-    ...
+
+*def* make_score_filter(*threshold*):
+
+    ...
+
 ```
 
 Calling:
 
 ```python
+
 filter_high = make_score_filter(0.80)
+
 ```
 
 returns another function that remembers the threshold.
@@ -1875,89 +1902,119 @@ returns another function that remembers the threshold.
 Final implementation:
 
 ```python
-def make_score_filter(threshold: float):
-    def check(scores):
-        result = []
 
-        for score in scores:
-            if score is None or score == "":
-                continue
+*def* make_score_filter(*threshold*: *float*):
 
-            try:
-                converted_value = float(score)
-            except ValueError:
-                continue
+    *def* check(*scores*):
 
-            if converted_value >= threshold:
-                result.append(converted_value)
+        result = []
 
-        return result
+        for score in scores:
 
-    return check
+            if score is None or score == "":
+
+                continue
+
+            try:
+
+                converted_value = *float*(score)
+
+            except *ValueError*:
+
+                continue
+
+            if converted_value >= threshold:
+
+                result.append(converted_value)
+
+        return result
+
+    return check
+
 ```
 
 Example:
 
 ```python
+
 scores = ["0.91", "bad", 0.75, None, "0.85", ""]
 
 filter_high(scores)
+
 # [0.91, 0.85]
+
 ```
 
 The inner function still has access to `threshold` after `make_score_filter()` has returned.
 
 ---
 
-## 3. What a Closure Is
+**## 3. What a Closure Is**
 
 A closure is an inner function that retains access to variables from its enclosing function scope even after the outer function has finished.
 
 Example:
 
 ```python
-def outer():
-    x = 10
 
-    def inner():
-        print(x)
+*def* outer():
 
-    return inner
+    x = 10
+
+    *def* inner():
+
+        print(x)
+
+    return inner
+
 ```
 
 Then:
 
 ```python
+
 f = outer()
+
 f()
+
 # 10
+
 ```
 
 The inner function keeps access to the enclosing `x`.
 
 ---
 
-## 4. Closure Binding Behavior
+**## 4. Closure Binding Behavior**
 
 Consider:
 
 ```python
-def outer():
-    x = 10
 
-    def inner():
-        print(x)
+*def* outer():
 
-    x = 20
-    return inner
+    x = 10
+
+    *def* inner():
+
+        print(x)
+
+    x = 20
+
+    return inner
+
 ```
 
 Then:
 
 ```python
+
 f = outer()
+
 f()
+
 # 20
+
 ```
 
 The closure does not necessarily store a frozen snapshot of `10`.
@@ -1966,33 +2023,44 @@ It keeps access to the enclosing variable binding, whose value became `20` befor
 
 ---
 
-## 5. Local Variable vs Enclosing Variable
+**## 5. Local Variable vs Enclosing Variable**
 
 Without `nonlocal`:
 
 ```python
-def outer():
-    x = 10
 
-    def inner():
-        x = 50
-        print(x)
+*def* outer():
 
-    inner()
-    print(x)
+    x = 10
+
+    *def* inner():
+
+        x = 50
+
+        print(x)
+
+    inner()
+
+    print(x)
+
 ```
 
 Output:
 
 ```text
+
 50
+
 10
+
 ```
 
 The assignment:
 
 ```python
+
 x = 50
+
 ```
 
 creates a new local variable inside `inner()`.
@@ -2001,72 +2069,98 @@ It does not modify the enclosing `x`.
 
 ---
 
-## 6. `nonlocal`
+**## 6.** `nonlocal`
 
 Using:
 
 ```python
+
 nonlocal x
+
 ```
 
 allows an inner function to rebind the nearest enclosing function variable.
 
 ```python
-def outer():
-    x = 10
 
-    def inner():
-        nonlocal x
-        x = 50
-        print(x)
+*def* outer():
 
-    inner()
-    print(x)
+    x = 10
+
+    *def* inner():
+
+        nonlocal x
+
+        x = 50
+
+        print(x)
+
+    inner()
+
+    print(x)
+
 ```
 
 Output:
 
 ```text
+
 50
+
 50
+
 ```
 
 Interview summary:
 
-> `nonlocal` lets an inner function modify a variable from its nearest enclosing function scope.
+*>* `nonlocal` *lets an inner function modify a variable from its nearest enclosing function scope.*
 
 ---
 
-## 7. Independent Closure State
+**## 7. Independent Closure State**
 
 A stateful counter:
 
 ```python
-def make_counter():
-    count = 0
 
-    def increment():
-        nonlocal count
-        count += 1
-        return count
+*def* make_counter():
 
-    return increment
+    count = 0
+
+    *def* increment():
+
+        nonlocal count
+
+        count += 1
+
+        return count
+
+    return increment
+
 ```
 
 Now:
 
 ```python
+
 c1 = make_counter()
+
 c2 = make_counter()
+
 ```
 
 creates two independent closure instances.
 
 ```python
-c1()  # 1
-c1()  # 2
-c2()  # 1
-c1()  # 3
+
+c1()  # 1
+
+c1()  # 2
+
+c2()  # 1
+
+c1()  # 3
+
 ```
 
 Each call to `make_counter()` creates its own enclosing `count`.
@@ -2074,91 +2168,481 @@ Each call to `make_counter()` creates its own enclosing `count`.
 Conceptually:
 
 ```text
+
 c1 -> count = 0
+
 c2 -> count = 0
+
 ```
 
 They do not share state.
 
 ---
 
-## 8. Closure Counter with Parameters
+**## 8. Closure Counter with Parameters**
 
 Closures can combine remembered state with normal function parameters.
 
 ```python
-def make_counter():
-    count = 0
 
-    def increment(step=1):
-        nonlocal count
-        count += step
-        return count
+*def* make_counter():
 
-    return increment
+    count = 0
+
+    *def* increment(*step*=1):
+
+        nonlocal count
+
+        count += step
+
+        return count
+
+    return increment
+
 ```
 
 Then:
 
 ```python
+
 c = make_counter()
 
-c()    # 1
-c(5)   # 6
-c()    # 7
+c()    # 1
+
+c(5)   # 6
+
+c()    # 7
+
 ```
 
 The `count` value persists across calls, while `step` is supplied per call.
 
 ---
 
-## Day 006 Interview Takeaways
+**## Day 006 Interview Takeaways**
 
 - `TypeError` and `ValueError` represent different failure categories
+
 - closures retain access to enclosing variables
+
 - closures preserve bindings, not necessarily frozen value snapshots
+
 - assigning inside an inner function normally creates a local variable
+
 - `nonlocal` allows rebinding a nearest enclosing variable
+
 - different outer-function calls create independent closure state
+
 - closures can implement configurable functions without global variables
+
 - closures are useful in counters, callbacks, decorators, and function factories
 
 
-# Interview Lessons So Far
 
-### Requirement reading matters
+
+---
+
+# Day 007
+
+File:
+
+```text
+daily/day_007.py
+```
+
+Day 007 focused on **class-level vs instance-level OOP behavior**, especially `@classmethod`, `@staticmethod`, attribute lookup, and alternative constructors.
+
+## 1. Class Variable and Object Counter
+
+```python
+class ModelRun:
+    count = 0
+
+    def __init__(self, model, latency_ms):
+        self.model = model
+        self.latency_ms = latency_ms
+        ModelRun.count += 1
+
+    def is_slow(self, threshold):
+        return self.latency_ms > threshold
+
+    @classmethod
+    def total_created(cls):
+        return cls.count
+```
+
+Mental model:
+
+```text
+instance attribute -> belongs to one object
+class attribute    -> shared through the class
+```
+
+## 2. Class Attribute vs Instance Shadowing
+
+```python
+Model.category = "AI"
+m1.category = "NLP"
+```
+
+Then:
+
+```text
+m1.category    -> NLP
+m2.category    -> AI
+Model.category -> AI
+```
+
+Assigning through `m1` creates an instance-specific attribute that shadows the class value for that object.
+
+## 3. Instance, Class, and Static Methods
+
+```text
+instance method -> self -> object-specific state
+class method    -> cls  -> class-level state / alternative constructor
+static method   -> no automatic self or cls
+```
+
+A static method can be accessed through both the class and an existing object, but neither call automatically passes `self` or `cls`.
+
+## 4. Alternative Constructor
+
+```python
+class Employee:
+    company = "OpenAI"
+
+    def __init__(self, name, salary):
+        self.name = name
+        self.salary = salary
+
+    @classmethod
+    def from_string(cls, text):
+        name, salary = text.split("-")
+        return cls(name, int(salary))
+```
+
+```python
+employee = Employee.from_string("Shivam-50000")
+```
+
+This is an alternative to:
+
+```python
+employee = Employee("Shivam", 50000)
+```
+
+### Day 007 Takeaways
+
+- class variables are shared through the class
+- instance attributes can shadow class attributes
+- instance methods receive `self`
+- class methods receive `cls`
+- static methods receive neither automatically
+- `@classmethod` is useful for alternative constructors
+
+---
+
+# Day 008
+
+File:
+
+```text
+daily/day_008.py
+```
+
+Day 008 mixed **validation, case-insensitive filtering, static-method revision, decorators, and function references**.
+
+## 1. Safe Validation
+
+```python
+if "model" not in record or record.get("latency_ms") is None:
+    continue
+
+try:
+    latency = float(record["latency_ms"])
+except (TypeError, ValueError):
+    continue
+```
+
+## 2. Case-Insensitive Matching
+
+```python
+skill.lower() == user_skill.lower()
+```
+
+The task also reinforced skipping incomplete records and using `break` after a successful match.
+
+## 3. Static Method Review
+
+```python
+@staticmethod
+def greet():
+    return "Welcome"
+```
+
+Both are valid:
+
+```python
+Employee.greet()
+employee.greet()
+```
+
+The important point is that Python does not automatically bind an instance as `self` or the class as `cls`.
+
+## 4. Decorator Fundamentals
+
+```python
+def log_execution(func):
+    def wrapper():
+        print(func.__name__ + " Function started")
+        func()
+        print(func.__name__ + " execution ended")
+
+    return wrapper
+```
+
+```python
+@log_execution
+def train_model():
+    print("Training model")
+```
+
+Mental model:
+
+```python
+train_model = log_execution(train_model)
+```
+
+After decoration:
+
+```text
+train_model -> wrapper
+```
+
+So later:
+
+```python
+train_model()
+```
+
+runs `wrapper()`, which then calls the original function stored in `func`.
+
+## 5. Function Object vs Function Call
+
+```python
+reference = hello
+```
+
+stores the function object.
+
+```python
+value = hello()
+```
+
+executes the function.
+
+### Day 008 Takeaways
+
+- decorators receive a function and normally return another callable
+- `@decorator` means rebinding a function through the decorator
+- `return wrapper` returns the function object
+- `return wrapper()` would execute it immediately
+- static methods do not receive `self` or `cls` automatically
+
+---
+
+# Day 009
+
+File:
+
+```text
+daily/day_009.py
+```
+
+Day 009 focused on **generator batching, custom exceptions, iterable/iterator behavior, and custom iterator implementation**.
+
+## 1. Generator-Based Batching
+
+```python
+def batch_records(records, batch_size):
+    if batch_size <= 0:
+        raise ValueError("Batch Size must be a positive number")
+
+    for i in range(0, len(records), batch_size):
+        yield records[i:i + batch_size]
+```
+
+For:
+
+```python
+records = [10, 20, 30, 40, 50, 60, 70]
+```
+
+with batch size `3`, the generator yields:
+
+```text
+[10, 20, 30]
+[40, 50, 60]
+[70]
+```
+
+## 2. Custom Exceptions
+
+```python
+class InsufficientBalanceError(Exception):
+    pass
+```
+
+defines a custom exception type.
+
+```python
+raise InsufficientBalanceError("Insufficient Balance")
+```
+
+actually raises it when the failure condition occurs.
+
+## 3. OOP Validation
+
+```python
+class Wallet:
+    def __init__(self, balance):
+        self.balance = balance
+
+    def withdraw(self, amount):
+        if amount <= 0:
+            raise ValueError("Withdraw amount must be positive")
+
+        if amount > self.balance:
+            raise InsufficientBalanceError("Insufficient Balance")
+
+        self.balance -= amount
+        return self.balance
+```
+
+## 4. Iterable vs Iterator
+
+```text
+Iterable -> object from which an iterator can be created
+Iterator -> object that produces one value at a time with next()
+```
+
+Example:
+
+```python
+nums = [10, 20, 30]
+iterator = iter(nums)
+
+next(iterator)
+```
+
+When exhausted, `next()` raises `StopIteration`.
+
+## 5. Custom Iterator Protocol
+
+A custom iterator normally implements:
+
+```python
+__iter__()
+__next__()
+```
+
+Typical behavior:
+
+```python
+def __iter__(self):
+    return self
+```
+
+and:
+
+```python
+def __next__(self):
+    if finished:
+        raise StopIteration
+    return next_value
+```
+
+## 6. Countdown Iterator
+
+```python
+class Countdown:
+    def __init__(self, start):
+        self.current = start
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        if self.current <= 0:
+            raise StopIteration
+
+        value = self.current
+        self.current -= 1
+        return value
+```
+
+```python
+for value in Countdown(3):
+    print(value)
+```
+
+produces:
+
+```text
+3
+2
+1
+```
+
+### Day 009 Takeaways
+
+- generators can produce batches lazily
+- custom exceptions make domain failures explicit
+- iterable and iterator are related but not identical
+- `iter()` obtains an iterator
+- `next()` requests the next value
+- custom iterators implement `__iter__()` and `__next__()`
+- exhaustion is signaled by `StopIteration`
+- iterator/generator topics should be revisited with spaced practice
+
+---
+
+
+**# Interview Lessons So Far**
+
+**### Requirement reading matters**
 
 A solution can be logically close and still lose marks if it misses a requirement.
 
-### Edge cases matter
+**### Edge cases matter**
 
 Working for the sample input is not enough. Hidden cases have already included negative values, valid numeric zero, missing dictionary fields, and nested mutable objects.
 
-### Name the actual exception
+**### Name the actual exception**
 
 Instead of:
 
-> "This may give an error."
+*> "This may give an error."*
 
 prefer:
 
-> "`event["success"]` raises a `KeyError` if the key is missing."
+*> "*`event["success"]` *raises a* `KeyError` *if the key is missing."*
 
-### Prefer simple control flow
+**### Prefer simple control flow**
 
 After an early `return` or `continue`, avoid unnecessary `else` blocks when they do not improve readability.
 
-### Understand object behavior
+**### Understand object behavior**
 
 Python interview questions frequently test whether two names refer to the same object, whether an operation mutates that object, and whether a copy is shallow or deep.
 
 ---
 
-# Practice Coverage
+**# Practice Coverage**
 
 The repository will progressively cover:
 
-## Core Python
+**## Core Python**
 
 - variables and data types
 
@@ -2178,7 +2662,7 @@ The repository will progressively cover:
 
 - functions and scope
 
-- `*args` / `**kwargs`
+- `\*args` / `**kwargs`
 
 - comprehensions
 
@@ -2188,7 +2672,7 @@ The repository will progressively cover:
 
 - shallow vs deep copying
 
-## Object-Oriented Python
+**## Object-Oriented Python**
 
 - classes and objects
 
@@ -2218,7 +2702,7 @@ The repository will progressively cover:
 
 - MRO
 
-## Advanced Practical Python
+**## Advanced Practical Python**
 
 - iterables and iterators
 
@@ -2240,7 +2724,7 @@ The repository will progressively cover:
 
 - dataclasses
 
-## Standard Library
+**## Standard Library**
 
 - `collections`
 
@@ -2272,7 +2756,7 @@ The repository will progressively cover:
 
 - `copy`
 
-## Applied Python
+**## Applied Python**
 
 - `requests`
 
@@ -2290,7 +2774,7 @@ The repository will progressively cover:
 
 - edge-case handling
 
-## Data Python
+**## Data Python**
 
 - NumPy
 
@@ -2308,7 +2792,7 @@ The repository will progressively cover:
 
 - practical performance considerations
 
-## Python Internals
+**## Python Internals**
 
 Interview-level understanding of:
 
@@ -2338,7 +2822,7 @@ Interview-level understanding of:
 
 ---
 
-# Running the Practice Files
+**# Running the Practice Files**
 
 Clone the repository:
 
@@ -2363,6 +2847,10 @@ python daily/day_003.py
 python daily/day_004.py
 
 python daily/day_005.py
+python daily/day_006.py
+python daily/day_007.py
+python daily/day_008.py
+python daily/day_009.py
 
 ```
 
@@ -2370,13 +2858,13 @@ On Windows, `py` can also be used depending on the Python installation:
 
 ```bash
 
-py daily/day_006.py
+py daily/day_009.py
 
 ```
 
 ---
 
-# Daily Workflow
+**# Daily Workflow**
 
 ```text
 
@@ -2422,7 +2910,7 @@ Example commit:
 
 git add .
 
-git commit -m "Day 6: closures, nonlocal and exception types"
+git commit -m "Day 9: generators, custom exceptions and iterators"
 
 git push
 
@@ -2430,7 +2918,7 @@ git push
 
 ---
 
-# Why This Repository Exists
+**# Why This Repository Exists**
 
 Strong Python interview performance requires more than remembering syntax.
 
@@ -2464,8 +2952,8 @@ This repository documents that progression through consistent, interview-style p
 
 ---
 
-## Status
+**## Status**
 
-**Active — Daily Python Interview Practice**
+****Active — Daily Python Interview Practice****
 
 New coding exercises, debugging cases, OOP implementations, Python internals, libraries, APIs, NumPy/Pandas tasks, and interview notes will be added progressively.
