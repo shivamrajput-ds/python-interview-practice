@@ -1,8 +1,8 @@
-**# Python Interview Practice**
+****# Python Interview Practice****
 
-*> Coding-first Python practice for Data Science, Machine Learning, AI/ML, Applied AI, Generative AI, RAG, and junior Python engineering roles.*
+*\*> Coding-first Python practice for Data Science, Machine Learning, AI/ML, Applied AI, Generative AI, RAG, and junior Python engineering roles.\**
 
-This repository documents my daily effort to become stronger at ****writing, debugging, reviewing, and explaining Python under interview and real-development constraints****.
+This repository documents my daily effort to become stronger at ********writing, debugging, reviewing, and explaining Python under interview and real-development constraints******.
 
 The goal is not to complete another Python course or collect isolated syntax examples. The goal is to build the ability to:
 
@@ -20,9 +20,9 @@ The goal is not to complete another Python course or collect isolated syntax exa
 
 - use Python naturally in data, ML, AI, API, and backend-oriented work
 
-*>* ****This is not a DSA repository.**** * *
+\*>\* ****This is not a DSA repository.**** \* \*
 
-*> Advanced graph, tree, dynamic-programming, and competitive-programming practice is maintained separately.*
+\*> Advanced graph, tree, dynamic-programming, and competitive-programming practice is maintained separately.\*
 
 ---
 
@@ -189,7 +189,9 @@ Topic folders are populated only when a concept has enough standalone practice t
 | Day 009 | Generator batching, custom exceptions, iterable vs iterator, custom iterators | ✅ Completed |
 
 | Day 010 | File handling, line-by-line processing, file writing, paths, modular `main()` structure | ✅ Completed |
+
 | Day 011 | Sets, string normalization, first-occurrence preservation, tuple sorting, `sorted()` + `lambda` | ✅ Completed |
+| Day 012 | Inheritance, `super()`, method overriding, `*args`, `**kwargs` | ✅ Completed |
 
 ---
 
@@ -237,7 +239,7 @@ Both names reference the same list.
 
 ```python
 
-def add_score(*scores*, *value*):
+def add_score(\*scores\*, \*value\*):
 
     scores += [value]
 
@@ -249,7 +251,7 @@ By contrast:
 
 ```python
 
-def add_score(*scores*, *value*):
+def add_score(\*scores\*, \*value\*):
 
     scores = scores + [value]
 
@@ -323,7 +325,7 @@ Unsafe:
 
 ```python
 
-def register_model(*model*, *models*=[]):
+def register_model(\*model\*, \*models\*=[]):
 
     ...
 
@@ -333,7 +335,7 @@ Safer:
 
 ```python
 
-def register_model(*model*, *models*=None):
+def register_model(\*model\*, \*models\*=None):
 
     if models is None:
 
@@ -381,7 +383,7 @@ A generator-based filtering task processed records without collecting all matchi
 
 ```python
 
-def slow_requests(*records*, *threshold*):
+def slow_requests(\*records\*, \*threshold\*):
 
     for record in records:
 
@@ -513,7 +515,7 @@ A custom ranking task used tuple-based sort keys.
 
 ```python
 
-def get_rank(*record*):
+def get_rank(\*record\*):
 
     score = record.get("score")
 
@@ -667,7 +669,7 @@ static method   -> no automatic self or cls
 
 @classmethod
 
-def from_string(cls, *text*):
+def from_string(cls, \*text\*):
 
     name, salary = text.split("-")
 
@@ -699,7 +701,7 @@ daily/day_008.py
 
 ```python
 
-def log_execution(*func*):
+def log_execution(\*func\*):
 
     def wrapper():
 
@@ -783,7 +785,7 @@ daily/day_009.py
 
 ```python
 
-def batch_records(*records*, *batch_size*):
+def batch_records(\*records\*, \*batch_size\*):
 
     if batch_size <= 0:
 
@@ -829,7 +831,7 @@ Iterator -> object that produces one value at a time with next()
 
 class Countdown:
 
-    def __init__(self, *start*):
+    def __init__(self, \*start\*):
 
         self.current = start
 
@@ -881,7 +883,7 @@ Day 010 moved into practical file-system coding with two connected exercises.
 
 ```python
 
-def load_scores(*file_path*: str) -> list[float]:
+def load_scores(\*file_path\*: str) -> list[float]:
 
     result = []
 
@@ -955,7 +957,7 @@ processes the file incrementally, one line at a time.
 
 ```python
 
-def save_errors(*file_path*: str, *errors*: list[str]) -> int:
+def save_errors(\*file_path\*: str, \*errors\*: list[str]) -> int:
 
     count = 0
 
@@ -985,7 +987,7 @@ along with:
 
 ```python
 
-os.makedirs("data", *exist_ok*=True)
+os.makedirs("data", \*exist_ok\*=True)
 
 os.path.join("data", "errors.txt")
 
@@ -1030,12 +1032,15 @@ to keep execution separate from reusable function definitions.
 ---
 
 **
+
 ## Day 011 — Sets, Normalization, and Multi-Key Sorting
 
 File:
 
 ```text
+
 daily/day_011.py
+
 ```
 
 Day 011 focused on using **sets for fast duplicate detection**, normalizing strings safely, preserving first appearance, and sorting tuples with multiple priorities.
@@ -1045,42 +1050,63 @@ Day 011 focused on using **sets for fast duplicate detection**, normalizing stri
 Input:
 
 ```python
+
 tags = [
-    "Python",
-    "ML",
-    "python",
-    "FastAPI",
-    "ml",
-    "RAG",
-    "fastapi",
-    "  Python  ",
+
+    "Python",
+
+    "ML",
+
+    "python",
+
+    "FastAPI",
+
+    "ml",
+
+    "RAG",
+
+    "fastapi",
+
+    "  Python  ",
+
 ]
+
 ```
 
 Final solution:
 
 ```python
+
 def unique_tags(tags: list[str]) -> list[str]:
-    result = []
-    seen = set()
 
-    for tag in tags:
-        cleaned = tag.strip()
-        normalized = cleaned.lower()
+    result = []
 
-        if normalized in seen:
-            continue
+    seen = set()
 
-        seen.add(normalized)
-        result.append(cleaned)
+    for tag in tags:
 
-    return result
+        cleaned = tag.strip()
+
+        normalized = cleaned.lower()
+
+        if normalized in seen:
+
+            continue
+
+        seen.add(normalized)
+
+        result.append(cleaned)
+
+    return result
+
 ```
 
 Expected output:
 
 ```python
+
 ["Python", "ML", "FastAPI", "RAG"]
+
 ```
 
 The important design decision is to store the **normalized value** in `seen`, while appending the **cleaned first-occurrence form** to the result.
@@ -1088,35 +1114,53 @@ The important design decision is to store the **normalized value** in `seen`, wh
 Mental model:
 
 ```text
+
 raw value
-   ↓
+
+   ↓
+
 strip()
-   ↓
+
+   ↓
+
 cleaned value
-   ↓
+
+   ↓
+
 lower()
-   ↓
+
+   ↓
+
 normalized comparison key
+
 ```
 
 Example:
 
 ```text
+
 "Python"
+
 "python"
-"  Python  "
+
+"  Python  "
+
 ```
 
 all normalize to:
 
 ```text
+
 "python"
+
 ```
 
 while the first cleaned form:
 
 ```text
+
 "Python"
+
 ```
 
 is preserved in the output.
@@ -1126,14 +1170,19 @@ is preserved in the output.
 A set is useful for membership checks:
 
 ```python
+
 if normalized in seen:
-    continue
+
+    continue
+
 ```
 
 Then:
 
 ```python
+
 seen.add(normalized)
+
 ```
 
 marks the value as already encountered.
@@ -1141,9 +1190,13 @@ marks the value as already encountered.
 This pattern is useful for:
 
 - tag normalization
+
 - unique IDs
+
 - duplicate file names
+
 - processed-event tracking
+
 - deduplication pipelines
 
 ### 3. Multi-Key Tuple Sorting
@@ -1151,41 +1204,61 @@ This pattern is useful for:
 Input:
 
 ```python
+
 models = [
-    ("fraud_v1", 0.91),
-    ("spam_v2", 0.85),
-    ("churn_v1", 0.95),
-    ("rag_v1", 0.85),
+
+    ("fraud_v1", 0.91),
+
+    ("spam_v2", 0.85),
+
+    ("churn_v1", 0.95),
+
+    ("rag_v1", 0.85),
+
 ]
+
 ```
 
 Requirement:
 
 ```text
+
 score descending
+
 same score -> model name ascending
+
 ```
 
 Final solution:
 
 ```python
+
 def rank_models(
-    models: list[tuple[str, float]]
+
+    models: list[tuple[str, float]]
+
 ) -> list[tuple[str, float]]:
-    return sorted(models, key=lambda x: (-x[1], x[0]))
+
+    return sorted(models, key=lambda x: (-x[1], x[0]))
+
 ```
 
 The key:
 
 ```python
+
 (-x[1], x[0])
+
 ```
 
 means:
 
 ```text
+
 -x[1] -> score descending
- x[0] -> name ascending when scores tie
+
+ x[0] -> name ascending when scores tie
+
 ```
 
 Python compares tuple sort keys from left to right.
@@ -1193,13 +1266,17 @@ Python compares tuple sort keys from left to right.
 ### 4. `sorted()` vs `.sort()` Revisited
 
 ```python
+
 sorted(models)
+
 ```
 
 returns a **new list** and leaves the original input order unchanged.
 
 ```python
+
 models.sort()
+
 ```
 
 mutates the existing list and returns `None`.
@@ -1209,13 +1286,214 @@ The task required the original list to remain unchanged, so `sorted()` was the c
 ### Day 011 Takeaways
 
 - use a `set` for efficient duplicate membership checks
+
 - normalize strings before comparison
+
 - keep normalized keys separate from display/original-cleaned values
+
 - preserve order by appending only the first unseen occurrence
+
 - avoid unnecessary `defaultdict` when a set and list are sufficient
+
 - `sorted()` returns a new list
+
 - tuple sort keys can encode multiple ordering rules
+
 - negative numeric sort keys are a clean way to get descending numeric order while keeping another field ascending
+
+---
+
+
+## Day 012 — Inheritance, `super()`, `*args`, and `**kwargs`
+
+File:
+
+```text
+daily/day_012.py
+```
+
+Day 012 focused on **object-oriented reuse through inheritance**, parent initialization with `super()`, method overriding, and flexible function signatures with `*args` and `**kwargs`.
+
+### 1. Inheritance + `super()`
+
+A child class reused the parent class constructor while adding its own state.
+
+```python
+class Model:
+    def __init__(self, name: str):
+        self.name = name
+
+
+class TrainedModel(Model):
+    def __init__(self, name: str, score: float):
+        super().__init__(name)
+        self.score = score
+
+    def is_good(self) -> bool:
+        return self.score >= 0.90
+```
+
+Usage:
+
+```python
+model = TrainedModel("fraud_v1", 0.94)
+
+print(model.name)
+print(model.score)
+print(model.is_good())
+```
+
+Output:
+
+```text
+fraud_v1
+0.94
+True
+```
+
+Mental model:
+
+```text
+Model
+  ↑
+TrainedModel
+```
+
+`TrainedModel` inherits from `Model`, while:
+
+```python
+super().__init__(name)
+```
+
+calls the parent constructor so the parent-owned `name` initialization is reused instead of duplicated.
+
+### 2. Method Overriding
+
+A child class can provide its own implementation of a method already defined in the parent.
+
+```python
+class BaseModel:
+    def predict(self) -> str:
+        return "Base Prediction"
+
+
+class FraudModel(BaseModel):
+    def predict(self) -> str:
+        return "Fraud Prediction"
+```
+
+Then:
+
+```python
+BaseModel().predict()
+# Base Prediction
+
+FraudModel().predict()
+# Fraud Prediction
+```
+
+The child method overrides the inherited parent implementation for child objects.
+
+### 3. Variable Positional Arguments with `*args`
+
+```python
+def average(*scores: float) -> float:
+    if len(scores) == 0:
+        return 0
+
+    return sum(scores) / len(scores)
+```
+
+Example:
+
+```python
+average(10, 20, 30)
+```
+
+Inside the function:
+
+```python
+scores == (10, 20, 30)
+```
+
+Mental model:
+
+```text
+*args
+  ↓
+variable positional arguments
+  ↓
+tuple
+```
+
+This allows a function to accept any number of positional values.
+
+### 4. Variable Keyword Arguments with `**kwargs`
+
+```python
+def build_profile(**details):
+    return details
+```
+
+Example:
+
+```python
+build_profile(
+    name="Shivam Rajput",
+    role="ML Engineer",
+    experience=0,
+    cgpa=8.8,
+)
+```
+
+Inside the function:
+
+```python
+details == {
+    "name": "Shivam Rajput",
+    "role": "ML Engineer",
+    "experience": 0,
+    "cgpa": 8.8,
+}
+```
+
+Mental model:
+
+```text
+**kwargs
+    ↓
+variable keyword arguments
+    ↓
+dictionary
+```
+
+### 5. Compact Pythonic Boolean Return
+
+Instead of:
+
+```python
+if self.score >= 0.90:
+    return True
+return False
+```
+
+a cleaner equivalent is:
+
+```python
+return self.score >= 0.90
+```
+
+This keeps the implementation concise without changing behavior.
+
+### Day 012 Takeaways
+
+- inheritance lets child classes reuse parent behavior
+- `super()` provides a clean way to call parent-class methods
+- method overriding lets child classes customize inherited behavior
+- `*args` collects positional arguments into a tuple
+- `**kwargs` collects keyword arguments into a dictionary
+- direct boolean expressions are often cleaner than unnecessary `if/else` returns
+- inheritance and flexible function signatures are foundational for larger Python application design
 
 ---
 
@@ -1249,11 +1527,11 @@ Examples encountered so far:
 
 Instead of:
 
-*> "This may give an error."*
+\*> "This may give an error."\*
 
 Prefer:
 
-*> "*`event['success']` *raises* `KeyError` *if the key is missing."*
+\*> "\*`event['success']` \*raises\* `KeyError` \*if the key is missing."\*
 
 **## Prefer Simple Control Flow**
 
@@ -1313,7 +1591,7 @@ The repository is progressively covering the following areas.
 
 - functions and scope
 
-- `\*args` / `**kwargs`
+- `\\\*args` / `**kwargs`
 
 - comprehensions
 
@@ -1522,7 +1800,9 @@ python daily/day_008.py
 python daily/day_009.py
 
 python daily/day_010.py
+
 python daily/day_011.py
+python daily/day_012.py
 
 ```
 
@@ -1530,7 +1810,7 @@ On Windows, depending on the Python installation:
 
 ```bash
 
-py daily/day_011.py
+py daily/day_012.py
 
 ```
 
@@ -1582,9 +1862,9 @@ Example:
 
 git status
 
-git add README.md daily/day_011.py
+git add README.md daily/day_012.py
 
-git commit -m "Day 11: sets, normalization and tuple sorting"
+git commit -m "Day 12: inheritance, super, args and kwargs"
 
 git push
 
