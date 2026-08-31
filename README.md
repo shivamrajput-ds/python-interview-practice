@@ -86,7 +86,8 @@ python-interview-practice/
 │   ├── day_010.py
 │   ├── day_011.py
 │   ├── day_012.py
-│   └── day_013.py
+│   ├── day_013.py
+│   └── day_014.py
 │
 ├── debugging/
 ├── oop/
@@ -107,19 +108,20 @@ Topic folders are populated only when a concept has enough standalone practice t
 
 | Day | Main Focus | Status |
 |---|---|---|
-| Day 001 | Dictionary aggregation, missing keys, type hints, mutation vs rebinding, `+=` vs `+` | ✅ Completed |
-| Day 002 | OOP, mutable defaults, dictionary behavior, exception handling, numeric edge cases | ✅ Completed |
+| Day 001 | Dictionary aggregation, missing keys, type hints, mutation vs rebinding | ✅ Completed |
+| Day 002 | OOP, mutable defaults, dictionary behavior, exceptions, numeric edge cases | ✅ Completed |
 | Day 003 | Generators, lazy iteration, `yield`, `next()`, `StopIteration` | ✅ Completed |
 | Day 004 | Generator execution, shallow copy, deep copy, nested mutability | ✅ Completed |
-| Day 005 | Custom sorting, tuple keys, `sorted()` vs `.sort()`, list comprehensions | ✅ Completed |
-| Day 006 | Closures, enclosing scope, `nonlocal`, independent closure state, exception types | ✅ Completed |
+| Day 005 | Custom sorting, tuple keys, `sorted()` vs `.sort()`, comprehensions | ✅ Completed |
+| Day 006 | Closures, enclosing scope, `nonlocal`, independent closure state | ✅ Completed |
 | Day 007 | Class variables, instance shadowing, `@classmethod`, `@staticmethod`, alternative constructors | ✅ Completed |
 | Day 008 | Validation, case-insensitive filtering, decorators, wrappers, function rebinding | ✅ Completed |
 | Day 009 | Generator batching, custom exceptions, iterable vs iterator, custom iterators | ✅ Completed |
-| Day 010 | File handling, line-by-line processing, file writing, paths, modular `main()` structure | ✅ Completed |
-| Day 011 | Sets, string normalization, first-occurrence preservation, tuple sorting, `sorted()` + `lambda` | ✅ Completed |
+| Day 010 | File handling, line-by-line processing, paths, modular `main()` structure | ✅ Completed |
+| Day 011 | Sets, normalization, first-occurrence preservation, tuple sorting, `lambda` | ✅ Completed |
 | Day 012 | Inheritance, `super()`, method overriding, `*args`, `**kwargs` | ✅ Completed |
-| Day 013 | Context managers, `__enter__`, `__exit__`, validation, exception types, custom exceptions | ✅ Completed |
+| Day 013 | Context managers, `__enter__`, `__exit__`, validation, custom exceptions | ✅ Completed |
+| Day 014 | Generic decorators, argument forwarding, packing/unpacking, `@property`, setters | ✅ Completed |
 
 ---
 
@@ -133,20 +135,13 @@ File:
 daily/day_001.py
 ```
 
-### Event Aggregation
+Key lessons:
 
-The task summarized API-style event records by event type while safely handling missing or empty fields.
-
-Key concepts:
-
-- nested dictionary aggregation
-- `dict.get()`
-- key existence vs falsy values
-- type hints
-- single-pass processing
-- requirement reading
-
-### Mutation vs Rebinding
+- safe dictionary access with `dict.get()`
+- missing keys vs falsy values
+- shared object references
+- mutation vs rebinding
+- `+=` vs `+` for lists
 
 ```python
 a = [10, 20]
@@ -160,26 +155,7 @@ def add_score(scores, value):
     scores += [value]
 ```
 
-For lists, `+=` normally mutates the existing list.
-
-By contrast:
-
-```python
-def add_score(scores, value):
-    scores = scores + [value]
-```
-
-creates a new list and rebinds only the local name.
-
-Interview vocabulary reinforced:
-
-```text
-object reference
-shared reference
-mutation
-rebinding
-identity
-```
+For lists, `+=` normally mutates the existing object.
 
 ---
 
@@ -191,64 +167,22 @@ File:
 daily/day_002.py
 ```
 
-### OOP — Model Registry
+Key lessons:
 
-A class was built to:
+- model-registry style OOP
+- mutable default argument danger
+- manual max logic
+- handling all-negative values
+- `TypeError` vs `ValueError`
+- `NaN` / infinity edge cases
 
-- store model scores
-- add scores
-- return the best score
-- handle unknown models
-- avoid `max()` as an interview constraint
-
-A hidden edge case showed why:
-
-```python
-result = 0
-```
-
-can fail for all-negative values.
-
-A safer manual-scan initialization:
-
-```python
-result = float("-inf")
-```
-
-### Mutable Default Arguments
-
-Unsafe:
-
-```python
-def register_model(model, models=[]):
-    ...
-```
-
-Safer:
+Safer mutable-default pattern:
 
 ```python
 def register_model(model, models=None):
     if models is None:
         models = []
 ```
-
-### Numeric Cleaning
-
-The session reinforced:
-
-```text
-TypeError  -> inappropriate type
-ValueError -> acceptable type, invalid value
-```
-
-and the important fact that:
-
-```python
-float("NaN")
-float("inf")
-```
-
-do not raise `ValueError`.
 
 ---
 
@@ -260,51 +194,33 @@ File:
 daily/day_003.py
 ```
 
-A generator-based filtering task processed records without collecting all matching values first.
-
-```python
-def slow_requests(records, threshold):
-    for record in records:
-        ...
-        if record["latency_ms"] > threshold:
-            yield record
-```
-
-Key mental model:
+Mental model:
 
 ```text
-yield value
-   ↓
-produce value
-   ↓
+yield
+  ↓
+produce one value
+  ↓
 pause
-   ↓
+  ↓
 next()
-   ↓
+  ↓
 resume
 ```
 
-A generator is a specific kind of iterator.
-
-### `return` vs `yield`
-
-Inside a generator:
+Important distinction:
 
 ```python
 yield 30
 ```
 
-produces a normal value.
+produces a value, while:
 
 ```python
 return 30
 ```
 
-ends the generator and becomes:
-
-```text
-StopIteration(30)
-```
+inside a generator terminates iteration.
 
 ---
 
@@ -316,36 +232,23 @@ File:
 daily/day_004.py
 ```
 
-### Generator Execution Timing
+Covered:
 
-Calling a generator function creates the generator object, but the body starts only when iteration begins.
-
-### Shallow Copy
+- generator execution timing
+- shallow copy
+- deep copy
+- nested mutable state
 
 ```python
 x = [[1, 2], [3, 4]]
 y = x.copy()
-```
 
-The outer list is new, but nested mutable objects remain shared.
-
-```python
 x is y
 # False
 
 x[0] is y[0]
 # True
 ```
-
-### Deep Copy
-
-```python
-import copy
-
-y = copy.deepcopy(x)
-```
-
-Nested mutable objects are copied recursively.
 
 ---
 
@@ -357,26 +260,18 @@ File:
 daily/day_005.py
 ```
 
-A custom ranking task used tuple-based sort keys.
+Covered:
+
+- multi-key sorting
+- tuple sort keys
+- descending numeric + ascending text ordering
+- `sorted()` vs `.sort()`
+- mutation behavior
+- comprehensions
 
 ```python
-def get_rank(record):
-    score = record.get("score")
-
-    if score is None:
-        return (1, 0, record["model"])
-
-    return (0, -score, record["model"])
+sorted(models, key=lambda x: (-x[1], x[0]))
 ```
-
-Concepts reinforced:
-
-- `sorted()` returns a new list
-- `.sort()` mutates and returns `None`
-- tuples can encode multiple sort priorities
-- negative values can reverse numeric order
-- `append()` mutates in place and returns `None`
-- list comprehensions can filter and transform concisely
 
 ---
 
@@ -388,9 +283,7 @@ File:
 daily/day_006.py
 ```
 
-### Closure
-
-A closure is an inner function that retains access to variables from its enclosing scope after the outer function has finished.
+A closure keeps access to variables from its enclosing scope.
 
 ```python
 def make_counter():
@@ -404,25 +297,7 @@ def make_counter():
     return increment
 ```
 
-Different calls create independent state:
-
-```python
-c1 = make_counter()
-c2 = make_counter()
-```
-
-```text
-c1 -> independent count
-c2 -> independent count
-```
-
-Concepts:
-
-- enclosing scope
-- closure state
-- `nonlocal`
-- local rebinding
-- independent closure instances
+Different calls create independent closure state.
 
 ---
 
@@ -434,31 +309,7 @@ File:
 daily/day_007.py
 ```
 
-### Class Variable
-
-```python
-class ModelRun:
-    count = 0
-```
-
-A class-level counter tracks shared state.
-
-### Instance Shadowing
-
-```python
-Model.category = "AI"
-m1.category = "NLP"
-```
-
-Then:
-
-```text
-m1.category    -> NLP
-m2.category    -> AI
-Model.category -> AI
-```
-
-### Method Mental Model
+Mental model:
 
 ```text
 instance method -> self -> object-specific state
@@ -466,19 +317,13 @@ class method    -> cls  -> class-level state / alternative construction
 static method   -> no automatic self or cls
 ```
 
-### Alternative Constructor
+Alternative constructor:
 
 ```python
 @classmethod
 def from_string(cls, text):
     name, salary = text.split("-")
     return cls(name, int(salary))
-```
-
-This provides another way to create an object:
-
-```python
-Employee.from_string("Shivam-50000")
 ```
 
 ---
@@ -491,40 +336,18 @@ File:
 daily/day_008.py
 ```
 
-### Decorator
-
-```python
-def log_execution(func):
-    def wrapper():
-        print("Function started")
-        func()
-        print("Function finished")
-
-    return wrapper
-```
-
 Using:
 
 ```python
 @log_execution
 def train_model():
-    print("Training model")
+    ...
 ```
 
-is approximately equivalent to:
+is roughly equivalent to:
 
 ```python
 train_model = log_execution(train_model)
-```
-
-After decoration:
-
-```text
-train_model
-    ↓
- wrapper
-    ↓
-original function stored in func
 ```
 
 Important distinction:
@@ -533,13 +356,13 @@ Important distinction:
 return wrapper
 ```
 
-returns the function object.
+returns a function object, while:
 
 ```python
 return wrapper()
 ```
 
-would execute it immediately.
+executes it immediately.
 
 ---
 
@@ -551,61 +374,26 @@ File:
 daily/day_009.py
 ```
 
-### Generator Batching
+Covered:
 
-```python
-def batch_records(records, batch_size):
-    if batch_size <= 0:
-        raise ValueError("Batch size must be positive")
+- batch generators
+- custom exceptions
+- iterable vs iterator
+- `__iter__()`
+- `__next__()`
+- `StopIteration`
 
-    for i in range(0, len(records), batch_size):
-        yield records[i:i + batch_size]
-```
-
-### Custom Exception
-
-```python
-class InsufficientBalanceError(Exception):
-    pass
-```
-
-Definition and raising are separate actions:
-
-```python
-raise InsufficientBalanceError("Insufficient Balance")
-```
-
-### Iterable vs Iterator
+Custom iterator mental model:
 
 ```text
-Iterable -> object from which an iterator can be created
-Iterator -> object that produces one value at a time with next()
-```
-
-### Custom Iterator
-
-```python
-class Countdown:
-    def __init__(self, start):
-        self.current = start
-
-    def __iter__(self):
-        return self
-
-    def __next__(self):
-        if self.current <= 0:
-            raise StopIteration
-
-        value = self.current
-        self.current -= 1
-        return value
-```
-
-Key protocol:
-
-```text
+iter(obj)
+   ↓
 __iter__()
+   ↓
+next(obj)
+   ↓
 __next__()
+   ↓
 StopIteration
 ```
 
@@ -619,112 +407,22 @@ File:
 daily/day_010.py
 ```
 
-Day 010 moved into practical file-system coding with two connected exercises.
-
-### 1. Load Valid Scores from a File
-
-```python
-def load_scores(file_path: str) -> list[float]:
-    result = []
-
-    try:
-        with open(file_path, "r") as file:
-            for score in file:
-                score = score.strip()
-
-                if score == "":
-                    continue
-
-                try:
-                    converted_score = float(score)
-                except ValueError:
-                    continue
-
-                result.append(converted_score)
-
-    except FileNotFoundError:
-        print("File Not Found")
-        return []
-
-    return result
-```
-
-The task reinforced:
+Covered:
 
 - `with open(...)`
 - line-by-line processing
 - `.strip()`
-- blank-line handling
 - numeric conversion
-- `ValueError`
 - `FileNotFoundError`
-
-Important distinction:
-
-```python
-file.read()
-```
-
-reads the complete file into one string.
+- writing files
+- `os.path.join()`
+- `os.makedirs(..., exist_ok=True)`
+- modular `main()` structure
 
 ```python
-for line in file:
-```
-
-processes the file incrementally, one line at a time.
-
-### 2. Save Errors to a File
-
-```python
-def save_errors(file_path: str, errors: list[str]) -> int:
-    count = 0
-
-    with open(file_path, "w") as file:
-        for error in errors:
-            file.write(error + "\n")
-            count += 1
-
-    return count
-```
-
-The task reinforced:
-
-```text
-"r" -> read
-"w" -> write / overwrite
-```
-
-along with:
-
-```python
-os.makedirs("data", exist_ok=True)
-os.path.join("data", "errors.txt")
-```
-
-### Modular Structure
-
-The final solution used:
-
-```python
-def main():
-    ...
-
 if __name__ == "__main__":
     main()
 ```
-
-to keep execution separate from reusable function definitions.
-
-### Day 010 Takeaways
-
-- use `with open(...)` so file resources are managed safely
-- prefer line-by-line iteration when the whole file is not needed at once
-- `.strip()` returns a cleaned string; `.split()` returns a list
-- catch specific exceptions
-- `"w"` overwrites existing content
-- `os.path.join()` builds portable paths
-- `os.makedirs(..., exist_ok=True)` safely creates directories
-- modular code becomes easier to test, reuse, and maintain
 
 ---
 
@@ -736,9 +434,7 @@ File:
 daily/day_011.py
 ```
 
-Day 011 focused on using **sets for fast duplicate detection**, normalizing strings safely, preserving first appearance, and sorting tuples with multiple priorities.
-
-### 1. Remove Duplicate Tags While Preserving Order
+Deduplication pattern:
 
 ```python
 def unique_tags(tags: list[str]) -> list[str]:
@@ -758,55 +454,7 @@ def unique_tags(tags: list[str]) -> list[str]:
     return result
 ```
 
-Expected output:
-
-```python
-["Python", "ML", "FastAPI", "RAG"]
-```
-
-Mental model:
-
-```text
-raw value
-   ↓
-strip()
-   ↓
-cleaned value
-   ↓
-lower()
-   ↓
-normalized comparison key
-```
-
-### 2. Multi-Key Tuple Sorting
-
-```python
-def rank_models(
-    models: list[tuple[str, float]]
-) -> list[tuple[str, float]]:
-    return sorted(models, key=lambda x: (-x[1], x[0]))
-```
-
-The key:
-
-```python
-(-x[1], x[0])
-```
-
-means:
-
-```text
--x[1] -> score descending
- x[0] -> name ascending when scores tie
-```
-
-### Day 011 Takeaways
-
-- use a `set` for efficient duplicate membership checks
-- normalize strings before comparison
-- preserve the cleaned first occurrence
-- use `sorted()` when the original list must remain unchanged
-- tuple sort keys can encode multiple ordering rules
+Key idea: compare normalized values while preserving the cleaned first occurrence.
 
 ---
 
@@ -818,85 +466,20 @@ File:
 daily/day_012.py
 ```
 
-Day 012 focused on **object-oriented reuse through inheritance**, parent initialization with `super()`, method overriding, and flexible function signatures with `*args` and `**kwargs`.
+Covered:
 
-### 1. Inheritance + `super()`
-
-```python
-class Model:
-    def __init__(self, name: str):
-        self.name = name
-
-
-class TrainedModel(Model):
-    def __init__(self, name: str, score: float):
-        super().__init__(name)
-        self.score = score
-
-    def is_good(self) -> bool:
-        return self.score >= 0.90
-```
-
-### 2. Method Overriding
-
-```python
-class BaseModel:
-    def predict(self) -> str:
-        return "Base Prediction"
-
-
-class FraudModel(BaseModel):
-    def predict(self) -> str:
-        return "Fraud Prediction"
-```
-
-The child method overrides the inherited implementation for child objects.
-
-### 3. Variable Positional Arguments with `*args`
-
-```python
-def average(*scores: float) -> float:
-    if len(scores) == 0:
-        return 0
-
-    return sum(scores) / len(scores)
-```
+- inheritance
+- parent initialization with `super()`
+- method overriding
+- variable positional arguments
+- variable keyword arguments
 
 Mental model:
 
 ```text
-*args
-  ↓
-variable positional arguments
-  ↓
-tuple
+*args    -> positional arguments -> tuple
+**kwargs -> keyword arguments    -> dictionary
 ```
-
-### 4. Variable Keyword Arguments with `**kwargs`
-
-```python
-def build_profile(**details):
-    return details
-```
-
-Mental model:
-
-```text
-**kwargs
-    ↓
-variable keyword arguments
-    ↓
-dictionary
-```
-
-### Day 012 Takeaways
-
-- inheritance lets child classes reuse parent behavior
-- `super()` provides a clean way to call parent-class methods
-- overriding lets child classes customize inherited behavior
-- `*args` collects positional arguments into a tuple
-- `**kwargs` collects keyword arguments into a dictionary
-- direct boolean expressions are often cleaner than unnecessary `if/else` returns
 
 ---
 
@@ -908,40 +491,7 @@ File:
 daily/day_013.py
 ```
 
-Day 013 moved into **resource management and robust validation** using custom context managers, built-in exception types, and domain-specific custom exceptions.
-
-### 1. Custom Context Manager
-
-A custom file context manager was implemented using `__enter__()` and `__exit__()`.
-
-```python
-class ManagedFile:
-    def __init__(self, mode: str, file_path: str):
-        self.mode = mode
-        self.file_path = file_path
-        self.file = None
-
-    def __enter__(self):
-        self.file = open(self.file_path, self.mode)
-        return self.file
-
-    def __exit__(self, exc_type, exc_value, traceback):
-        if exc_type is not None:
-            print(exc_type)
-            print(exc_value)
-            print(traceback)
-
-        self.file.close()
-```
-
-Usage:
-
-```python
-with ManagedFile("w", "data.txt") as file:
-    file.write("Hello Python")
-```
-
-Mental model:
+Custom context-manager mental model:
 
 ```text
 __enter__()
@@ -960,108 +510,237 @@ cleanup / release resource
 For files:
 
 ```text
-__enter__() -> open file
-with block  -> read / write
-__exit__()  -> close file
+__enter__() -> open
+with block  -> read/write
+__exit__()  -> close
 ```
 
-The value returned by `__enter__()` becomes the value after `as`.
-
-### 2. Exception Information in `__exit__()`
-
-Python passes three exception-related values automatically:
+Python roughly turns:
 
 ```python
-def __exit__(self, exc_type, exc_value, traceback):
-    ...
+with ManagedFile("w", "data.txt") as file:
+    file.write("Hello")
 ```
 
-If no exception occurs:
+into:
+
+```python
+manager = ManagedFile("w", "data.txt")
+file = manager.__enter__()
+
+try:
+    file.write("Hello")
+finally:
+    manager.__exit__(None, None, None)
+```
+
+Also covered:
+
+- `TypeError`
+- `ValueError`
+- `isinstance(value, (int, float))`
+- domain-specific custom exceptions
+
+---
+
+## Day 014 — Generic Decorators and Controlled Attributes
+
+File:
 
 ```text
-exc_type   -> None
-exc_value  -> None
-traceback  -> None
+daily/day_014.py
 ```
 
-If an exception occurs inside the `with` block, `__exit__()` still runs, allowing cleanup to happen reliably.
+Day 014 strengthened two important Python ideas:
 
-Returning `True` from `__exit__()` suppresses the exception. Returning `None` or `False` allows it to propagate.
+1. **generic decorators that preserve arguments and return values**
+2. **controlled attribute access using `@property` and setters**
 
-### 3. Accuracy Validation
+### 1. Generic Decorator with `*args` and `**kwargs`
 
 ```python
-def calculate_accuracy(correct, total):
-    if not isinstance(correct, (int, float)) or not isinstance(total, (int, float)):
-        raise TypeError("correct and total must be numeric")
+def log_execution(func):
+    def wrapper(*args, **kwargs):
+        print(f"Executing {func.__name__}")
 
-    if total <= 0 or correct < 0 or correct > total:
-        raise ValueError("Enter valid correct and total values")
+        result = func(*args, **kwargs)
 
-    return round((correct / total) * 100, 2)
+        print(f"Exiting {func.__name__}")
+        return result
+
+    return wrapper
 ```
 
-This reinforced the difference between:
+Decorated function:
+
+```python
+@log_execution
+def predict(model_name: str, score: float) -> bool:
+    print(f"{model_name}: {score}")
+    return score > 0.90
+```
+
+The original function keeps a meaningful signature while the wrapper stays generic.
+
+### 2. Packing vs Unpacking
+
+This was a key mental-model improvement.
+
+Function definition:
+
+```python
+def wrapper(*args, **kwargs):
+```
+
+means **pack incoming arguments**:
 
 ```text
-TypeError  -> inappropriate type
-ValueError -> acceptable type, invalid value
+*args    -> tuple
+**kwargs -> dictionary
 ```
 
-It also reinforced:
+Function call:
 
 ```python
-isinstance(value, (int, float))
+func(*args, **kwargs)
 ```
 
-for validating multiple accepted numeric types.
+means **unpack and forward them**.
 
-### 4. Custom Exception for Model Confidence
+Example:
 
 ```python
-class InvalidConfidenceError(Exception):
-    pass
+predict("fraud_v1", score=0.94)
 ```
 
-Validation:
+Inside the wrapper:
 
 ```python
-def validate_confidence(confidence):
-    if not isinstance(confidence, (int, float)):
-        raise TypeError("Confidence must be a number")
-
-    if confidence < 0 or confidence > 1:
-        raise InvalidConfidenceError(
-            "Confidence must be between 0 and 1"
-        )
-
-    return confidence
+args == ("fraud_v1",)
+kwargs == {"score": 0.94}
 ```
 
-This separates:
+Then:
+
+```python
+func(*args, **kwargs)
+```
+
+becomes roughly:
+
+```python
+func("fraud_v1", score=0.94)
+```
+
+Memory rule:
 
 ```text
-invalid Python type
-        ↓
-TypeError
-
-invalid domain value
-        ↓
-InvalidConfidenceError
+def f(*args, **kwargs) -> PACK
+f(*args, **kwargs)     -> UNPACK
 ```
 
-### Day 013 Takeaways
+### 3. `@property`
 
-- context managers separate resource management from resource usage
-- `__enter__()` performs setup and returns the usable resource
-- `__exit__()` performs cleanup
-- `__exit__()` still runs when an exception occurs inside the block
-- exception metadata is available through `exc_type`, `exc_value`, and `traceback`
-- specific exceptions are better than replacing them with generic `Exception`
-- `isinstance(value, (int, float))` supports multiple accepted numeric types
-- `TypeError` is appropriate for invalid types
-- `ValueError` is appropriate for invalid values
-- custom exceptions make domain-specific failures easier to understand and handle
+A property lets method logic run behind normal-looking attribute access.
+
+```python
+class ModelConfig:
+    def __init__(self, threshold):
+        self.threshold = threshold
+
+    @property
+    def threshold(self):
+        return self._threshold
+```
+
+Usage:
+
+```python
+config.threshold
+```
+
+looks like normal attribute access, but Python calls the getter.
+
+### 4. Property Setter
+
+```python
+@threshold.setter
+def threshold(self, new_value):
+    if not 0 <= new_value <= 1:
+        raise ValueError("Invalid threshold")
+
+    self._threshold = new_value
+```
+
+Now:
+
+```python
+config.threshold = 0.95
+```
+
+automatically calls the setter.
+
+### 5. Constructor Validation Through the Setter
+
+This:
+
+```python
+self.threshold = threshold
+```
+
+is intentionally used inside `__init__`.
+
+It routes the initial value through the setter:
+
+```text
+ModelConfig(0.85)
+      ↓
+self.threshold = 0.85
+      ↓
+setter runs
+      ↓
+validation
+      ↓
+self._threshold = 0.85
+```
+
+Using:
+
+```python
+self._threshold = threshold
+```
+
+inside the constructor would bypass setter validation.
+
+### 6. Backing Attribute
+
+The public interface is:
+
+```python
+config.threshold
+```
+
+while the real stored value is:
+
+```python
+self._threshold
+```
+
+This separation prevents recursive setter calls and gives controlled access to internal state.
+
+### Day 014 Takeaways
+
+- a generic decorator should accept `*args` and `**kwargs`
+- wrappers should forward original arguments
+- wrappers should preserve original return values
+- function definitions pack arguments
+- function calls with `*args` / `**kwargs` unpack arguments
+- `@property` exposes controlled getter behavior through attribute syntax
+- `@property_name.setter` intercepts assignments
+- setters are useful for validation
+- constructor assignments can be routed through setters
+- `_attribute` can act as the internal backing value
+- validation should cover the complete allowed range
 
 ---
 
@@ -1072,8 +751,6 @@ InvalidConfidenceError
 A solution can be close and still lose marks if it misses a specific requirement.
 
 ## Edge Cases Matter
-
-Sample input is not enough.
 
 Examples encountered so far:
 
@@ -1086,6 +763,8 @@ Examples encountered so far:
 - exhausted iterators
 - invalid resource state
 - invalid numeric ranges
+- positional vs keyword argument forwarding
+- constructor validation bypass
 
 ## Name the Actual Exception
 
@@ -1099,7 +778,7 @@ Prefer:
 
 ## Prefer Simple Control Flow
 
-After an early:
+After:
 
 ```python
 return
@@ -1109,24 +788,34 @@ raise
 
 an extra `else` is often unnecessary.
 
-## Understand Object Behavior
+## Understand Python Protocols
 
-Python interviews frequently test:
+Several Python features look like special syntax, but are built on protocols:
 
 ```text
-reference vs copy
-identity vs equality
-mutation vs rebinding
-instance state vs class state
-function object vs function call
-resource acquisition vs cleanup
+with obj
+    -> __enter__()
+    -> block
+    -> __exit__()
+
+next(obj)
+    -> __next__()
+
+@decorator
+    -> function = decorator(function)
+
+config.threshold
+    -> property getter
+
+config.threshold = value
+    -> property setter
 ```
+
+Understanding these transformations makes advanced Python easier to reason about.
 
 ---
 
 # Practice Coverage Roadmap
-
-The repository is progressively covering the following areas.
 
 ## Core Python
 
@@ -1157,8 +846,9 @@ The repository is progressively covering the following areas.
 - inheritance
 - overriding
 - `super()`
-- encapsulation
 - properties
+- setters
+- encapsulation
 - polymorphism
 - abstraction
 - dunder methods
@@ -1265,12 +955,13 @@ python daily/day_010.py
 python daily/day_011.py
 python daily/day_012.py
 python daily/day_013.py
+python daily/day_014.py
 ```
 
-On Windows, depending on the Python installation:
+On Windows:
 
 ```bash
-py daily/day_013.py
+py daily/day_014.py
 ```
 
 ---
@@ -1297,12 +988,12 @@ Document Learning
 Commit to GitHub
 ```
 
-Example:
+Latest example:
 
 ```bash
 git status
-git add README.md daily/day_013.py
-git commit -m "Day 13: context managers and custom exceptions"
+git add README.md daily/day_014.py
+git commit -m "Day 14: generic decorators and property validation"
 git push
 ```
 
