@@ -4,7 +4,7 @@
 
 This repository documents my daily effort to become stronger at **writing, debugging, reviewing, and explaining Python under interview and real-development constraints**.
 
-The goal is not to complete another Python course or collect isolated syntax examples. The goal is to build the ability to:
+The goal is not to finish another Python course or collect isolated syntax examples. The goal is to build the ability to:
 
 - understand unfamiliar Python code
 - design clean solutions from requirements
@@ -87,7 +87,9 @@ python-interview-practice/
 │   ├── day_011.py
 │   ├── day_012.py
 │   ├── day_013.py
-│   └── day_014.py
+│   ├── day_014.py
+│   ├── day_015.py
+│   └── day_016.py
 │
 ├── debugging/
 ├── oop/
@@ -122,6 +124,8 @@ Topic folders are populated only when a concept has enough standalone practice t
 | Day 012 | Inheritance, `super()`, method overriding, `*args`, `**kwargs` | ✅ Completed |
 | Day 013 | Context managers, `__enter__`, `__exit__`, validation, custom exceptions | ✅ Completed |
 | Day 014 | Generic decorators, argument forwarding, packing/unpacking, `@property`, setters | ✅ Completed |
+| Day 015 | Generator filtering, sets, validation, duplicate control, lazy iteration | ✅ Completed |
+| Day 016 | Dunder methods, `__len__`, `__contains__`, `__str__`, natural object behavior | ✅ Completed |
 
 ---
 
@@ -129,11 +133,7 @@ Topic folders are populated only when a concept has enough standalone practice t
 
 ## Day 001 — Aggregation, Missing Keys, Mutation vs Rebinding
 
-File:
-
-```text
-daily/day_001.py
-```
+File: `daily/day_001.py`
 
 Key lessons:
 
@@ -143,56 +143,26 @@ Key lessons:
 - mutation vs rebinding
 - `+=` vs `+` for lists
 
-```python
-a = [10, 20]
-b = a
-```
-
-Both names reference the same list.
-
-```python
-def add_score(scores, value):
-    scores += [value]
-```
-
-For lists, `+=` normally mutates the existing object.
-
 ---
 
 ## Day 002 — OOP, Mutable Defaults, Exceptions, Numeric Edge Cases
 
-File:
+File: `daily/day_002.py`
 
-```text
-daily/day_002.py
-```
-
-Key lessons:
+Covered:
 
 - model-registry style OOP
 - mutable default argument danger
 - manual max logic
-- handling all-negative values
+- all-negative edge cases
 - `TypeError` vs `ValueError`
-- `NaN` / infinity edge cases
-
-Safer mutable-default pattern:
-
-```python
-def register_model(model, models=None):
-    if models is None:
-        models = []
-```
+- `NaN` and infinity behavior
 
 ---
 
 ## Day 003 — Generators and Lazy Iteration
 
-File:
-
-```text
-daily/day_003.py
-```
+File: `daily/day_003.py`
 
 Mental model:
 
@@ -211,26 +181,15 @@ resume
 Important distinction:
 
 ```python
-yield 30
+yield 30   # produce a value
+return 30  # terminate the generator
 ```
-
-produces a value, while:
-
-```python
-return 30
-```
-
-inside a generator terminates iteration.
 
 ---
 
 ## Day 004 — Generator Reinforcement and Copying
 
-File:
-
-```text
-daily/day_004.py
-```
+File: `daily/day_004.py`
 
 Covered:
 
@@ -254,11 +213,7 @@ x[0] is y[0]
 
 ## Day 005 — Custom Sorting and Pythonic Collections
 
-File:
-
-```text
-daily/day_005.py
-```
+File: `daily/day_005.py`
 
 Covered:
 
@@ -266,7 +221,6 @@ Covered:
 - tuple sort keys
 - descending numeric + ascending text ordering
 - `sorted()` vs `.sort()`
-- mutation behavior
 - comprehensions
 
 ```python
@@ -277,13 +231,9 @@ sorted(models, key=lambda x: (-x[1], x[0]))
 
 ## Day 006 — Closures and `nonlocal`
 
-File:
+File: `daily/day_006.py`
 
-```text
-daily/day_006.py
-```
-
-A closure keeps access to variables from its enclosing scope.
+A closure retains access to variables from its enclosing scope.
 
 ```python
 def make_counter():
@@ -303,11 +253,7 @@ Different calls create independent closure state.
 
 ## Day 007 — Class Methods, Static Methods, Alternative Constructors
 
-File:
-
-```text
-daily/day_007.py
-```
+File: `daily/day_007.py`
 
 Mental model:
 
@@ -330,11 +276,7 @@ def from_string(cls, text):
 
 ## Day 008 — Decorators and Function Rebinding
 
-File:
-
-```text
-daily/day_008.py
-```
+File: `daily/day_008.py`
 
 Using:
 
@@ -350,62 +292,41 @@ is roughly equivalent to:
 train_model = log_execution(train_model)
 ```
 
-Important distinction:
+Key distinction:
 
 ```python
-return wrapper
+return wrapper    # return function object
+return wrapper()  # execute immediately
 ```
-
-returns a function object, while:
-
-```python
-return wrapper()
-```
-
-executes it immediately.
 
 ---
 
 ## Day 009 — Generator Batching, Custom Exceptions, Iterators
 
-File:
-
-```text
-daily/day_009.py
-```
+File: `daily/day_009.py`
 
 Covered:
 
-- batch generators
+- generator batching
 - custom exceptions
 - iterable vs iterator
 - `__iter__()`
 - `__next__()`
 - `StopIteration`
 
-Custom iterator mental model:
+Mental model:
 
 ```text
-iter(obj)
-   ↓
-__iter__()
-   ↓
-next(obj)
-   ↓
-__next__()
-   ↓
-StopIteration
+iter(obj) -> __iter__()
+next(obj) -> __next__()
+end       -> StopIteration
 ```
 
 ---
 
 ## Day 010 — File Handling and Modular Python
 
-File:
-
-```text
-daily/day_010.py
-```
+File: `daily/day_010.py`
 
 Covered:
 
@@ -428,11 +349,7 @@ if __name__ == "__main__":
 
 ## Day 011 — Sets, Normalization, and Multi-Key Sorting
 
-File:
-
-```text
-daily/day_011.py
-```
+File: `daily/day_011.py`
 
 Deduplication pattern:
 
@@ -460,11 +377,7 @@ Key idea: compare normalized values while preserving the cleaned first occurrenc
 
 ## Day 012 — Inheritance, `super()`, `*args`, and `**kwargs`
 
-File:
-
-```text
-daily/day_012.py
-```
+File: `daily/day_012.py`
 
 Covered:
 
@@ -473,8 +386,6 @@ Covered:
 - method overriding
 - variable positional arguments
 - variable keyword arguments
-
-Mental model:
 
 ```text
 *args    -> positional arguments -> tuple
@@ -485,13 +396,9 @@ Mental model:
 
 ## Day 013 — Context Managers, Validation, and Custom Exceptions
 
-File:
+File: `daily/day_013.py`
 
-```text
-daily/day_013.py
-```
-
-Custom context-manager mental model:
+Context-manager mental model:
 
 ```text
 __enter__()
@@ -539,109 +446,35 @@ Also covered:
 - `TypeError`
 - `ValueError`
 - `isinstance(value, (int, float))`
-- domain-specific custom exceptions
+- custom domain exceptions
 
 ---
 
 ## Day 014 — Generic Decorators and Controlled Attributes
 
-File:
+File: `daily/day_014.py`
 
-```text
-daily/day_014.py
-```
-
-Day 014 strengthened two important Python ideas:
-
-1. **generic decorators that preserve arguments and return values**
-2. **controlled attribute access using `@property` and setters**
-
-### 1. Generic Decorator with `*args` and `**kwargs`
+### Generic Decorator
 
 ```python
 def log_execution(func):
     def wrapper(*args, **kwargs):
         print(f"Executing {func.__name__}")
-
         result = func(*args, **kwargs)
-
         print(f"Exiting {func.__name__}")
         return result
 
     return wrapper
 ```
 
-Decorated function:
-
-```python
-@log_execution
-def predict(model_name: str, score: float) -> bool:
-    print(f"{model_name}: {score}")
-    return score > 0.90
-```
-
-The original function keeps a meaningful signature while the wrapper stays generic.
-
-### 2. Packing vs Unpacking
-
-This was a key mental-model improvement.
-
-Function definition:
-
-```python
-def wrapper(*args, **kwargs):
-```
-
-means **pack incoming arguments**:
-
-```text
-*args    -> tuple
-**kwargs -> dictionary
-```
-
-Function call:
-
-```python
-func(*args, **kwargs)
-```
-
-means **unpack and forward them**.
-
-Example:
-
-```python
-predict("fraud_v1", score=0.94)
-```
-
-Inside the wrapper:
-
-```python
-args == ("fraud_v1",)
-kwargs == {"score": 0.94}
-```
-
-Then:
-
-```python
-func(*args, **kwargs)
-```
-
-becomes roughly:
-
-```python
-func("fraud_v1", score=0.94)
-```
-
-Memory rule:
+### Packing vs Unpacking
 
 ```text
 def f(*args, **kwargs) -> PACK
 f(*args, **kwargs)     -> UNPACK
 ```
 
-### 3. `@property`
-
-A property lets method logic run behind normal-looking attribute access.
+### `@property` and Setter
 
 ```python
 class ModelConfig:
@@ -651,96 +484,183 @@ class ModelConfig:
     @property
     def threshold(self):
         return self._threshold
+
+    @threshold.setter
+    def threshold(self, new_value):
+        if not 0 <= new_value <= 1:
+            raise ValueError("Invalid threshold")
+
+        self._threshold = new_value
+```
+
+Key lesson: using `self.threshold = threshold` inside `__init__` routes initial values through setter validation.
+
+---
+
+## Day 015 — Generator Filtering, Sets, and Validation
+
+File: `daily/day_015.py`
+
+Day 015 combined multiple fundamentals in one practical task.
+
+The goal was to lazily yield only trusted model names while:
+
+- validating confidence values
+- applying a confidence threshold
+- preventing duplicate model output
+- preserving input order
+- avoiding an unnecessary result list
+
+```python
+def trusted_models(predictions, threshold):
+    seen = set()
+
+    for model_name, score in predictions:
+        if score < 0.0 or score > 1.0:
+            continue
+
+        if score < threshold:
+            continue
+
+        if model_name in seen:
+            continue
+
+        seen.add(model_name)
+        yield model_name
+```
+
+Important correction:
+
+```python
+0.0 > score > 1.0
+```
+
+does **not** mean "outside the range". It means:
+
+```text
+score < 0.0 AND score > 1.0
+```
+
+which can never be true.
+
+Correct validation:
+
+```python
+score < 0.0 or score > 1.0
+```
+
+### Day 015 Takeaways
+
+- generators support lazy output with `yield`
+- sets are useful for duplicate detection
+- `continue` keeps filtering logic simple
+- input order can be preserved while removing duplicates
+- chained comparisons must be interpreted carefully
+
+---
+
+## Day 016 — Dunder Methods and Natural Python Object Behavior
+
+File: `daily/day_016.py`
+
+Day 016 focused on how custom classes integrate with normal Python syntax through dunder methods.
+
+### `__len__()`
+
+```python
+def __len__(self):
+    return len(self.models)
+```
+
+Python mapping:
+
+```text
+len(obj)
+   ↓
+obj.__len__()
+```
+
+### `__contains__()`
+
+```python
+def __contains__(self, model_name):
+    return model_name in self.models
+```
+
+Python mapping:
+
+```text
+"fraud_v1" in registry
+        ↓
+registry.__contains__("fraud_v1")
+```
+
+### `__str__()`
+
+```python
+def __str__(self):
+    return f"Model(name={self.name}, score={self.score})"
+```
+
+Python mapping:
+
+```text
+print(obj)
+   ↓
+str(obj)
+   ↓
+obj.__str__()
+```
+
+### Combined `ScoreBoard`
+
+```python
+class ScoreBoard:
+    def __init__(self):
+        self.models = {}
+
+    def add(self, name, score):
+        self.models[name] = score
+
+    def __len__(self):
+        return len(self.models)
+
+    def __contains__(self, model_name):
+        return model_name in self.models
+
+    def __str__(self):
+        return f"ScoreBoard({len(self)} models)"
 ```
 
 Usage:
 
 ```python
-config.threshold
+board = ScoreBoard()
+
+board.add("fraud_v1", 0.91)
+board.add("spam_v1", 0.84)
+board.add("churn_v1", 0.95)
+
+print(len(board))
+# 3
+
+print("fraud_v1" in board)
+# True
+
+print(board)
+# ScoreBoard(3 models)
 ```
 
-looks like normal attribute access, but Python calls the getter.
+### Day 016 Takeaways
 
-### 4. Property Setter
-
-```python
-@threshold.setter
-def threshold(self, new_value):
-    if not 0 <= new_value <= 1:
-        raise ValueError("Invalid threshold")
-
-    self._threshold = new_value
-```
-
-Now:
-
-```python
-config.threshold = 0.95
-```
-
-automatically calls the setter.
-
-### 5. Constructor Validation Through the Setter
-
-This:
-
-```python
-self.threshold = threshold
-```
-
-is intentionally used inside `__init__`.
-
-It routes the initial value through the setter:
-
-```text
-ModelConfig(0.85)
-      ↓
-self.threshold = 0.85
-      ↓
-setter runs
-      ↓
-validation
-      ↓
-self._threshold = 0.85
-```
-
-Using:
-
-```python
-self._threshold = threshold
-```
-
-inside the constructor would bypass setter validation.
-
-### 6. Backing Attribute
-
-The public interface is:
-
-```python
-config.threshold
-```
-
-while the real stored value is:
-
-```python
-self._threshold
-```
-
-This separation prevents recursive setter calls and gives controlled access to internal state.
-
-### Day 014 Takeaways
-
-- a generic decorator should accept `*args` and `**kwargs`
-- wrappers should forward original arguments
-- wrappers should preserve original return values
-- function definitions pack arguments
-- function calls with `*args` / `**kwargs` unpack arguments
-- `@property` exposes controlled getter behavior through attribute syntax
-- `@property_name.setter` intercepts assignments
-- setters are useful for validation
-- constructor assignments can be routed through setters
-- `_attribute` can act as the internal backing value
-- validation should cover the complete allowed range
+- dunder methods connect custom objects to Python built-in syntax
+- `len(obj)` uses `__len__()`
+- `x in obj` can use `__contains__()`
+- `print(obj)` uses `__str__()`
+- sets automatically handle duplicate values
+- dictionaries fit key-value storage such as model → score
+- direct boolean returns are cleaner than unnecessary `if/else`
+- custom classes can be designed to feel natural and Pythonic
 
 ---
 
@@ -765,8 +685,10 @@ Examples encountered so far:
 - invalid numeric ranges
 - positional vs keyword argument forwarding
 - constructor validation bypass
+- duplicate handling
+- invalid chained comparisons
 
-## Name the Actual Exception
+## Prefer Specific Exceptions
 
 Instead of:
 
@@ -790,7 +712,7 @@ an extra `else` is often unnecessary.
 
 ## Understand Python Protocols
 
-Several Python features look like special syntax, but are built on protocols:
+Several Python features look magical at first, but map to concrete protocols:
 
 ```text
 with obj
@@ -809,9 +731,18 @@ config.threshold
 
 config.threshold = value
     -> property setter
+
+len(obj)
+    -> __len__()
+
+value in obj
+    -> __contains__()
+
+print(obj)
+    -> __str__()
 ```
 
-Understanding these transformations makes advanced Python easier to reason about.
+Understanding these mappings makes advanced Python much easier to reason about.
 
 ---
 
@@ -956,12 +887,14 @@ python daily/day_011.py
 python daily/day_012.py
 python daily/day_013.py
 python daily/day_014.py
+python daily/day_015.py
+python daily/day_016.py
 ```
 
 On Windows:
 
 ```bash
-py daily/day_014.py
+py daily/day_016.py
 ```
 
 ---
@@ -988,12 +921,12 @@ Document Learning
 Commit to GitHub
 ```
 
-Latest example:
+Latest commit example:
 
 ```bash
 git status
-git add README.md daily/day_014.py
-git commit -m "Day 14: generic decorators and property validation"
+git add README.md daily/day_015.py daily/day_016.py
+git commit -m "Days 15-16: generators, validation and dunder methods"
 git push
 ```
 
