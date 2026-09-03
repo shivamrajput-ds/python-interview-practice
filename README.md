@@ -89,7 +89,8 @@ python-interview-practice/
 │   ├── day_013.py
 │   ├── day_014.py
 │   ├── day_015.py
-│   └── day_016.py
+│   ├── day_016.py
+│   └── day_017.py
 │
 ├── debugging/
 ├── oop/
@@ -126,6 +127,7 @@ Topic folders are populated only when a concept has enough standalone practice t
 | Day 014 | Generic decorators, argument forwarding, packing/unpacking, `@property`, setters | ✅ Completed |
 | Day 015 | Generator filtering, sets, validation, duplicate control, lazy iteration | ✅ Completed |
 | Day 016 | Dunder methods, `__len__`, `__contains__`, `__str__`, natural object behavior | ✅ Completed |
+| Day 017 | Dataclasses, `__post_init__`, `Counter`, JSON serialization, file-system robustness | ✅ Completed |
 
 ---
 
@@ -664,6 +666,230 @@ print(board)
 
 ---
 
+
+## Day 017 — Dataclasses, Counter, and JSON Serialization
+
+File: `daily/day_017.py`
+
+Day 017 focused on using Python's standard library to reduce boilerplate, validate structured data, count repeated values, and persist experiment metrics as JSON.
+
+### 1. `@dataclass` for Data-Holding Classes
+
+Instead of manually writing a constructor for a simple data container:
+
+```python
+class ModelResult:
+    def __init__(self, model_name, accuracy, latency_ms):
+        self.model_name = model_name
+        self.accuracy = accuracy
+        self.latency_ms = latency_ms
+```
+
+a dataclass can declare the fields directly:
+
+```python
+from dataclasses import dataclass
+
+
+@dataclass
+class ModelResult:
+    model_name: str
+    accuracy: float
+    latency_ms: int
+```
+
+`@dataclass` automatically generates common methods such as:
+
+```text
+__init__()
+__repr__()
+__eq__()
+```
+
+That is why:
+
+```python
+result = ModelResult("fraud_v1", 0.94, 120)
+print(result)
+```
+
+produces a useful representation similar to:
+
+```text
+ModelResult(model_name='fraud_v1', accuracy=0.94, latency_ms=120)
+```
+
+### 2. Validation with `__post_init__()`
+
+A dataclass-generated `__init__()` assigns the fields first. Python then calls `__post_init__()`.
+
+```python
+@dataclass
+class ModelResult:
+    model_name: str
+    accuracy: float
+    latency_ms: int
+
+    def __post_init__(self):
+        if self.accuracy < 0 or self.accuracy > 1:
+            raise ValueError("Accuracy must be between 0 and 1")
+
+        if self.latency_ms < 0:
+            raise ValueError("Latency cannot be negative")
+```
+
+Mental model:
+
+```text
+ModelResult(...)
+      ↓
+generated __init__()
+      ↓
+fields assigned
+      ↓
+__post_init__()
+      ↓
+validation
+```
+
+This keeps data definition concise without giving up validation.
+
+### 3. Frequency Counting with `collections.Counter`
+
+```python
+from collections import Counter
+
+
+def prediction_counts(predictions):
+    freq = Counter(predictions)
+    return dict(freq)
+```
+
+Example input:
+
+```python
+predictions = [
+    "fraud",
+    "spam",
+    "fraud",
+    "fraud",
+    "churn",
+    "spam",
+]
+```
+
+Output:
+
+```python
+{
+    "fraud": 3,
+    "spam": 2,
+    "churn": 1,
+}
+```
+
+`Counter` performs the frequency counting, while:
+
+```python
+dict(freq)
+```
+
+converts the specialized `Counter` object into a normal dictionary when that is the required output type.
+
+### 4. Saving Metrics as JSON
+
+```python
+import json
+import os
+
+
+DATA_DIR = "data"
+
+
+def save_metrics(file_path, metrics):
+    os.makedirs(DATA_DIR, exist_ok=True)
+    full_path = os.path.join(DATA_DIR, file_path)
+
+    try:
+        with open(full_path, "w", encoding="utf-8") as file:
+            json.dump(metrics, file, indent=4)
+    except OSError as error:
+        print(error)
+        return False
+
+    return True
+```
+
+Example data:
+
+```python
+metrics = {
+    "model": "fraud_v1",
+    "accuracy": 0.94,
+    "latency_ms": 120,
+}
+```
+
+The resulting JSON is readable because of:
+
+```python
+indent=4
+```
+
+### 5. `json.dump()` vs Python Objects
+
+`json.dump()` serializes a Python object directly into an already-open file:
+
+```python
+json.dump(metrics, file, indent=4)
+```
+
+The flow is:
+
+```text
+Python dictionary
+      ↓
+JSON serialization
+      ↓
+open file
+      ↓
+metrics.json
+```
+
+### 6. Directory and File-System Robustness
+
+Opening:
+
+```text
+data/metrics.json
+```
+
+in write mode does not create the missing `data` directory automatically.
+
+Therefore:
+
+```python
+os.makedirs(DATA_DIR, exist_ok=True)
+```
+
+ensures that the directory exists before writing.
+
+For a general file-system write operation, `OSError` can represent a broader family of operating-system related failures than catching only `FileNotFoundError`.
+
+### Day 017 Takeaways
+
+- `@dataclass` reduces boilerplate for data-focused classes
+- dataclasses automatically provide useful generated methods
+- `__post_init__()` is useful for validation after generated initialization
+- `Counter` is a concise standard-library tool for frequency counting
+- `dict(...)` converts a `Counter` to a normal dictionary
+- `json.dump()` writes Python data directly to JSON files
+- `indent=4` makes JSON output human-readable
+- parent directories may need to be created before writing files
+- choosing an exception type that matches the operation makes code more robust
+
+---
+
 # Core Interview Lessons
 
 ## Requirement Reading Matters
@@ -687,6 +913,8 @@ Examples encountered so far:
 - constructor validation bypass
 - duplicate handling
 - invalid chained comparisons
+- invalid dataclass field ranges
+- missing output directories during file writes
 
 ## Prefer Specific Exceptions
 
@@ -740,6 +968,10 @@ value in obj
 
 print(obj)
     -> __str__()
+
+@dataclass
+    -> generated __init__ / __repr__ / __eq__
+    -> __post_init__ after initialization
 ```
 
 Understanding these mappings makes advanced Python much easier to reason about.
@@ -889,12 +1121,13 @@ python daily/day_013.py
 python daily/day_014.py
 python daily/day_015.py
 python daily/day_016.py
+python daily/day_017.py
 ```
 
 On Windows:
 
 ```bash
-py daily/day_016.py
+py daily/day_017.py
 ```
 
 ---
@@ -925,7 +1158,7 @@ Latest commit example:
 
 ```bash
 git status
-git add README.md daily/day_015.py daily/day_016.py
+git add README.md daily/day_015.py daily/day_017.py
 git commit -m "Days 15-16: generators, validation and dunder methods"
 git push
 ```
