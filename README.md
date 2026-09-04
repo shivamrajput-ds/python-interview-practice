@@ -90,7 +90,8 @@ python-interview-practice/
 │   ├── day_014.py
 │   ├── day_015.py
 │   ├── day_016.py
-│   └── day_017.py
+│   ├── day_017.py
+│   └── day_018.py
 │
 ├── debugging/
 ├── oop/
@@ -128,6 +129,7 @@ Topic folders are populated only when a concept has enough standalone practice t
 | Day 015 | Generator filtering, sets, validation, duplicate control, lazy iteration | ✅ Completed |
 | Day 016 | Dunder methods, `__len__`, `__contains__`, `__str__`, natural object behavior | ✅ Completed |
 | Day 017 | Dataclasses, `__post_init__`, `Counter`, JSON serialization, file-system robustness | ✅ Completed |
+| Day 018 | Logging, log levels, `os.listdir()`, `os.walk()`, path/file checks, recursive traversal | ✅ Completed |
 
 ---
 
@@ -890,6 +892,246 @@ For a general file-system write operation, `OSError` can represent a broader fam
 
 ---
 
+
+## Day 018 — Logging, File-System Traversal, and Recursive Counting
+
+File: `daily/day_018.py`
+
+Day 018 focused on **structured runtime logging** and practical file-system work with Python's `os` module.
+
+### 1. Logging Instead of Plain `print()`
+
+```python
+import logging
+
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(levelname)s - %(message)s",
+)
+```
+
+This configures readable log output such as:
+
+```text
+INFO - fraud_v1 accepted with score 0.94
+WARNING - spam_v1 has low score 0.65
+ERROR - churn_v1 has invalid score 1.4
+```
+
+### 2. Model Score Validation with Log Levels
+
+```python
+def validate_model_score(model_name, score):
+    if score < 0 or score > 1:
+        logging.error(f"{model_name} has invalid score {score}")
+        return False
+
+    if score < 0.80:
+        logging.warning(f"{model_name} has low score {score}")
+        return False
+
+    logging.info(f"{model_name} accepted with score {score}")
+    return True
+```
+
+Mental model:
+
+```text
+valid score
+    -> INFO
+
+low but valid score
+    -> WARNING
+
+invalid score
+    -> ERROR
+```
+
+This task also reinforced that a function should return exactly what the requirement expects, not just print/log the result.
+
+### 3. Checking Whether a Path Exists
+
+```python
+os.path.exists(folder_path)
+```
+
+This checks whether the supplied path exists.
+
+For a counting function:
+
+```python
+if not os.path.exists(folder_path):
+    return 0
+```
+
+is more appropriate than returning `False`, because the function's result is a count.
+
+### 4. Direct Folder Listing with `os.listdir()`
+
+```python
+os.listdir(folder_path)
+```
+
+returns only the direct contents of a folder.
+
+Example:
+
+```text
+project/
+├── app.py
+├── utils.py
+└── tests/
+    └── test_app.py
+```
+
+`os.listdir("project")` sees:
+
+```text
+app.py
+utils.py
+tests
+```
+
+It does not automatically enter `tests/`.
+
+### 5. Building and Inspecting Paths
+
+```python
+full_path = os.path.join(folder_path, item)
+```
+
+creates the full path for a direct child.
+
+Then:
+
+```python
+os.path.isfile(full_path)
+```
+
+checks whether that child is a file rather than a directory.
+
+### 6. Inspecting File Extensions
+
+```python
+os.path.splitext("app.py")
+```
+
+returns:
+
+```python
+("app", ".py")
+```
+
+So direct `.py` file counting can use:
+
+```python
+if os.path.splitext(item)[1] == ".py":
+    count += 1
+```
+
+### 7. Counting Only Direct `.py` Files
+
+```python
+def count_python_files(folder_path):
+    if not os.path.exists(folder_path):
+        return 0
+
+    count = 0
+
+    for item in os.listdir(folder_path):
+        full_path = os.path.join(folder_path, item)
+
+        if os.path.isfile(full_path):
+            if os.path.splitext(item)[1] == ".py":
+                count += 1
+
+    return count
+```
+
+This version intentionally ignores `.py` files inside subfolders.
+
+### 8. Recursive Traversal with `os.walk()`
+
+When subfolders also need to be searched, `os.walk()` is the appropriate tool.
+
+```python
+for root, dirs, files in os.walk(folder_path):
+    ...
+```
+
+Each iteration gives:
+
+```text
+root  -> current directory path
+dirs  -> subdirectories at this level
+files -> files at this level
+```
+
+Recursive `.py` counting:
+
+```python
+def count_python_files_recursive(folder_path):
+    if not os.path.exists(folder_path):
+        return 0
+
+    count = 0
+
+    for root, dirs, files in os.walk(folder_path):
+        for file in files:
+            if os.path.splitext(file)[1] == ".py":
+                count += 1
+
+    return count
+```
+
+Mental model:
+
+```text
+os.listdir()
+    -> current directory only
+
+os.walk()
+    -> current directory
+    -> child directories
+    -> deeper nested directories
+```
+
+### 9. `os` vs `pathlib`
+
+Both are valid for path handling.
+
+`os` style:
+
+```python
+os.path.exists(path)
+os.path.join(folder, file)
+```
+
+`pathlib` style:
+
+```python
+path.exists()
+path / "file.py"
+```
+
+Day 018 intentionally focused on the `os` approach first so the file-system mechanics were clear before introducing the more object-oriented `pathlib` style.
+
+### Day 018 Takeaways
+
+- `logging` gives structured runtime messages with severity levels
+- `INFO`, `WARNING`, and `ERROR` communicate different kinds of program state
+- `os.path.exists()` checks path existence
+- `os.listdir()` lists direct children only
+- `os.path.join()` builds full paths
+- `os.path.isfile()` distinguishes files from folders
+- `os.path.splitext()` separates a filename from its extension
+- `os.walk()` traverses directories recursively
+- return values should match the function's contract
+- `os` remains valid and widely used, while `pathlib` offers a modern object-oriented alternative
+
+---
+
 # Core Interview Lessons
 
 ## Requirement Reading Matters
@@ -915,6 +1157,8 @@ Examples encountered so far:
 - invalid chained comparisons
 - invalid dataclass field ranges
 - missing output directories during file writes
+- invalid/missing folder paths during traversal
+- direct vs recursive directory scope
 
 ## Prefer Specific Exceptions
 
@@ -972,6 +1216,12 @@ print(obj)
 @dataclass
     -> generated __init__ / __repr__ / __eq__
     -> __post_init__ after initialization
+
+os.listdir(path)
+    -> direct children only
+
+os.walk(path)
+    -> recursive directory traversal
 ```
 
 Understanding these mappings makes advanced Python much easier to reason about.
@@ -1122,12 +1372,13 @@ python daily/day_014.py
 python daily/day_015.py
 python daily/day_016.py
 python daily/day_017.py
+python daily/day_018.py
 ```
 
 On Windows:
 
 ```bash
-py daily/day_017.py
+py daily/day_018.py
 ```
 
 ---
@@ -1158,7 +1409,7 @@ Latest commit example:
 
 ```bash
 git status
-git add README.md daily/day_015.py daily/day_017.py
+git add README.md daily/day_015.py daily/day_018.py
 git commit -m "Days 15-16: generators, validation and dunder methods"
 git push
 ```
